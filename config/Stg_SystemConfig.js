@@ -16,7 +16,7 @@ const loggerConfig = {
         { type: 'console' },
         {
             "type": "file",
-            "filename": "../logs/log_batch.log",
+            "filename": "../stage/log_batch.html",
             "maxLogSize": 2048000,
             "backups": 10
         }
