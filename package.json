@@ -1,9 +1,9 @@
 {
-    "name": "log_search",
+    "name": "log_batch",
     "version": "0.0.1",
     "dependencies": {
         "assert-plus": "*",
-        "elasticsearch":"12.1.3",
+        "later"	: "*",
         "log4js": "*",
         "moment": "2.18.1",
         "mongodb": "2.2.24",
@@ -17,11 +17,11 @@
         "seq": "0.3.5"
     },
     "scripts": {
-        "start": "node main.js",
+        "start": "node Batch.js",
         "test": "mocha test"
     },
     "author": "myxxjs",
-    "repository" : "https://github.com/maguon/log_search.git",
-    "description": "The project for text search",
+    "repository" : "https://github.com/maguon/log_batch.git",
+    "description": "The project for batch jobnp",
     "license": "MIT"
 }
