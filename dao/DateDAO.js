@@ -36,15 +36,13 @@ var createDate = function(params,callback){
         logger.debug(' createDate ')
         callback(error,result)
     });
-
-
-
 }
 
 const initStorageStat = (callback)=>{
     const query="insert into storage_stat_date (date_id,storage_id,balance) " +
         "  (select DATE_FORMAT(CURRENT_DATE(),'%Y%m%d') as date_id ,ssd.storage_id ,ssd.balance " +
-        " from storage_stat_date ssd left join storage_info si on ssd.storage_id=si.id where si.storage_status=1) ";
+        " from storage_stat_date ssd left join storage_info si on ssd.storage_id=si.id " +
+        " where ssd.date_id = DATE_FORMAT(CURRENT_DATE(),'%Y%m%d')-1 and si.storage_status=1) ";
     db.dbQuery(query,[],function(error,result){
         logger.debug(' initStorageStat ')
         callback(error,result)
