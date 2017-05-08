@@ -24,33 +24,32 @@ const endSched = {
     schedules:endComposite
 }
 
-dateBl.saveStatDate((err,result) =>{
-    if(err){
-        logger.error('create new date error:'+err.stack);
-    }else{
-        if(result && result.success){
-            logger.info('create new date success');
-        }else{
-            logger.info('create new date false');
-        }
-    }
-});
-dateBl.initStorageStat((err,result)=>{
-    if(err){
-        logger.error('create new storage balance error:'+err.stack);
-    }else{
-        if(result && result.affectedRows){
-            logger.info('create new storage balance success');
-        }else{
-            logger.info('create new storage balance false');
-        }
-    }
-})
 
 try{
     later.setInterval(()=>{
 
-
+        dateBl.saveStatDate((err,result) =>{
+            if(err){
+                logger.error('create new date error:'+err.stack);
+            }else{
+                if(result && result.success){
+                    logger.info('create new date success');
+                }else{
+                    logger.info('create new date false');
+                }
+            }
+        });
+        dateBl.initStorageStat((err,result)=>{
+            if(err){
+                logger.error('create new storage balance error:'+err.stack);
+            }else{
+                if(result && result.affectedRows){
+                    logger.info('create new storage balance success');
+                }else{
+                    logger.info('create new storage balance false');
+                }
+            }
+        })
     },startSched);
 }catch(err){
     logger.error(err.stack);
