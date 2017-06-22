@@ -1,45 +1,23 @@
-const MongoClient = require('mongodb').MongoClient;
-const Server = require('mongodb').Server;
+'usestrict'
+const mongoose = require('mongoose');
 const serverLogger = require('../../util/ServerLogger');
 const sysConfig = require('../../config/SystemConfig');
 const logger = serverLogger.createLogger('MongoCon');
 
 
 
-let db= null;
-MongoClient.connect(sysConfig.mongoConfig.connect,(err, dbInstance) => {
-    if(err){
-        logger.error(' connect Mongodb failed ' + err.message);
+try{
+    mongoose.connect(sysConfig.mongoConfig.connect);
+    logger.info('Connect Mongodb Success');
+}catch(err){
+    logger.error('Connect mongodb error :' +err.stack)
+}
 
-    }else{
-        db= dbInstance;
-    }
-
-});
-
-const getDB= (callback) =>{
-    // Open the connection to the server
-    if (db==null){
-        logger.info(' getDb ' + 'attempt to create mongodb connection ')
-
-        MongoClient.connect(sysConfig.mongoConfig.connect,(err, dbInstance) => {
-            if(err){
-                logger.error(' connect Mongodb failed ' + err.message);
-                return callback(err,null);
-            }else{
-                return  callback(null,dbInstance);
-            }
-
-        });
-    }else {
-        callback(null, db);
-    }
-
-};
-
-
+const getMongo = ()=>{
+    return mongoose ;
+}
 
 module.exports = {
-    getDb: getDB
+    getMongo: getMongo
 };
 
