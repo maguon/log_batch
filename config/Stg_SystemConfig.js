@@ -31,7 +31,7 @@ const mongoConfig = {
 const gpsHost = {
     host : '139.224.65.40',
     port : 80,
-    cookie :'ASP.NET_SessionId=cmgw4jbltlxwxm55kjpxnn55',
+    cookie :'ASP.NET_SessionId=oauztsv433s1jd55wm2soajz',
     bizTruckUrl : '/webgps/ajax/VehicleMonitor,App_Web_ecpd3mt7.ashx?_method=GetVehJson&_session=r',
     truckBaseUrl:'/webgps/ajax/NetUI_BaiduMap,App_Web_askdqdzp.ashx?_method=GetVehicleRef&_session=r'
 }
