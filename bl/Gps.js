@@ -62,7 +62,7 @@ const saveBizTruck = (callback) =>{
                 logger.info('saveBizTruck' + ' getTruck success' +item.sim);
 
                 var truckParams = {
-                    vheNo: result.PosInfo[0].VehNoF,
+                    vheNo: result.PosInfo[0].VehNoF.replace('.','').replace('。','').replace("'",''),
                     sim : result.PosInfo[0].SimID ,
                     lat: result.PosInfo[0].Latitude,
                     lon : result.PosInfo[0].Longitude,
