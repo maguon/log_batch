@@ -7,12 +7,14 @@ const Promise = require('Promise');
 const sysConfig = require('./config/SystemConfig.js');
 const serverLogger = require('./util/ServerLogger.js');
 const dateBl = require('./bl/DateBl.js');
+const dispatchBl = require('./bl/DispatchBl.js');
 const logger = serverLogger.createLogger('Batch.js');
 
 
 later.date.localTime();
 logger.info('Log batch start at '+ (new Date()).toLocaleString());
 const startBasic = {h:[0],m: [0],s:[5]};
+//const startBasic = {s:[29,59]};
 const startComposite = [startBasic];
 const startSched =  {
     schedules:startComposite
@@ -40,6 +42,17 @@ try{
             }
         });
         dateBl.initStorageStat((err,result)=>{
+            if(err){
+                logger.error('create new storage balance error:'+err.stack);
+            }else{
+                if(result && result.affectedRows){
+                    logger.info('create new storage balance success');
+                }else{
+                    logger.info('create new storage balance false');
+                }
+            }
+        })
+        dispatchBl.completeTaskStat((err,result) =>{
             if(err){
                 logger.error('create new storage balance error:'+err.stack);
             }else{

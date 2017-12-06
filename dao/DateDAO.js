@@ -1,8 +1,8 @@
 'use strict'
 const db = require('../db/connection/MysqlDb.js');
 
-var serverLogger = require('../util/ServerLogger.js');
-var logger = serverLogger.createLogger('DateDAO.js');
+const serverLogger = require('../util/ServerLogger.js');
+const logger = serverLogger.createLogger('DateDAO.js');
 
 var queryDate = function(params,callback){
     const querySelect = "select * from date_base  where " +
