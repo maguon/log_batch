@@ -13,9 +13,9 @@ const logger = serverLogger.createLogger('Batch.js');
 
 later.date.localTime();
 logger.info('Log batch start at '+ (new Date()).toLocaleString());
-const startBasic = {h:[0],m: [0],s:[5]};
+//const startBasic = {h:[0],m: [0],s:[5]};
 const startBasic = {s:[29,59]};
-//const startComposite = [startBasic];
+const startComposite = [startBasic];
 const startSched =  {
     schedules:startComposite
 };
