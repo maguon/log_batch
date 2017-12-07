@@ -1,10 +1,10 @@
 'use strict'
-const Promise = require('Promise');
+const Promise = require('promise');
 const dispatchDao = require('../dao/DispatchDAO.js');
 const serverLogger = require('../util/ServerLogger.js');
 const logger = serverLogger.createLogger('DispatchBl.js');
 
-const completeTaskStat = (callback) =>{
+const completeTaskStat = () =>{
     const getCompleteTaskStat = () =>{
         return new Promise((resolve,reject)=>{
             dispatchDao.queryTaskStat({},(error,result)=>{
