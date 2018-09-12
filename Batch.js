@@ -62,6 +62,17 @@ try{
                     logger.info('completeTaskStat false');
                 }
             }
+        });
+        dispatchBl.completeTaskStatByDate((err,result) =>{
+            if(err){
+                logger.error('completeTaskStat error:'+err.stack);
+            }else{
+                if(result && result.affectedRows){
+                    logger.info('completeTaskStat success');
+                }else{
+                    logger.info('completeTaskStat false');
+                }
+            }
         })
     },startSched);
 }catch(err){

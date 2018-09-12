@@ -27,7 +27,18 @@ const updateTaskStat = (params,callback) => {
         callback(error,result)
     });
 }
+const updateTaskStatByDate = (params,callback) =>{
+    const query = "update dp_task_stat set task_stat_status = ? where task_stat_status = ? and date_id <= ? " ;
+    let paramArray=[],i=0;
+    paramArray[i++]=params.dpTaskStatStatus;
+    paramArray[i++]=params.originDpTaskStatStatus;
+    paramArray[i]=params.dateId;
+    db.dbQuery(query,paramArray,(error,result)=>{
+        logger.debug(' updateTaskStatByDate ')
+        callback(error,result)
+    });
+}
 
 module.exports = {
-    queryTaskStat , updateTaskStat
+    queryTaskStat , updateTaskStat ,updateTaskStatByDate
 }

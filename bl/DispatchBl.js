@@ -1,8 +1,10 @@
 'use strict'
+const moment = require('moment/moment.js');
 const Promise = require('promise');
 const dispatchDao = require('../dao/DispatchDAO.js');
 const serverLogger = require('../util/ServerLogger.js');
 const logger = serverLogger.createLogger('DispatchBl.js');
+
 
 const completeTaskStat = () =>{
     const getCompleteTaskStat = () =>{
@@ -44,6 +46,24 @@ const completeTaskStat = () =>{
 
 }
 
+const completeTaskStatByDate  = ()=>{
+    let dateLineTime = new Date().getTime() - 7*24*60*60*1000;
+    let dateLine = new Date(dateLineTime);
+    const dateId = moment(dateLine).format('YYYYMMDD');
+    let paramsObj = {
+        dpTaskStatStatus : 2 ,
+        originDpTaskStatStatus : 1,
+        dateId : dateId
+    }
+    dispatchDao.updateTaskStatByDate(paramsObj,(error,result)=>{
+        if(error){
+            reject(error);
+        }else{
+            resolve(result);
+        }
+    })
+}
+
 module.exports = {
-    completeTaskStat
+    completeTaskStat,completeTaskStatByDate
 }
