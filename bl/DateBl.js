@@ -15,7 +15,7 @@ const saveStatDate = (callback) =>{
     dateObj.yearMonth = Number(dateObj.year+dateUtil.padLeft(""+dateObj.month,2));
     dateObj.yearWeek = Number(dateObj.year+dateUtil.padLeft(""+dateObj.week,2));
     dateObj.id = Number(dateObj.yearMonth+dateUtil.padLeft(""+dateObj.day,2))
-    const p = new Promise.default((resolve,reject)=>{
+    const p = new Promise((resolve,reject)=>{
         dateDao.queryDate(dateObj,(err,rows)=>{
             resolve({err,rows})
         })

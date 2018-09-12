@@ -57,9 +57,9 @@ const completeTaskStatByDate  = ()=>{
     }
     dispatchDao.updateTaskStatByDate(paramsObj,(error,result)=>{
         if(error){
-            reject(error);
+            logger.error("completeTaskStatByDate" + error.message);
         }else{
-            resolve(result);
+            logger.info("completeTaskStatByDate success "+result.affectedRows);
         }
     })
 }
