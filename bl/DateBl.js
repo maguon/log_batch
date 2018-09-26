@@ -1,5 +1,5 @@
 'use strict'
-const Promise = require('Promise');
+const Promise = require('promise');
 const dateDao = require('../dao/DateDAO.js');
 const dateUtil = require('../util/DateUtil.js');
 const serverLogger = require('../util/ServerLogger.js');
