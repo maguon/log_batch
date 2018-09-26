@@ -3,7 +3,6 @@
  */
 const later = require('later');
 const Seq = require('seq');
-const Promise = require('Promise');
 const sysConfig = require('./config/SystemConfig.js');
 const serverLogger = require('./util/ServerLogger.js');
 const dateBl = require('./bl/DateBl.js');
