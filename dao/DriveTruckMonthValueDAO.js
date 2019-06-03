@@ -9,14 +9,12 @@ const logger = serverLogger.createLogger('DriveTruckMonthValueDAO.js');
 function addDistance(params,callback){
     var query = " insert into drive_truck_month_value" +
         " (y_month,drive_id,truck_id,reverse_count,load_distance,no_load_distance,distance," +
-        " load_oil_distance,no_oil_distance,receive_car_count,storage_car_count,enter_fee) " +
+        " receive_car_count,storage_car_count,enter_fee) " +
         " select "+params.yMonth+",dpr.drive_id,dpr.truck_id, " +
         " count(case when dpr.reverse_flag = 1 then dpr.id end) as reverse_count, " +
         " sum(case when dpr.load_flag = 1 then dpr.distance end) as load_distance, " +
         " sum(case when dpr.load_flag = 0 then dpr.distance end) as no_load_distance, " +
         " sum(dpr.distance) as distance, " +
-        " sum(tb.load_distance_oil) as load_oil_distance, " +
-        " sum(tb.no_load_distance_oil) as no_oil_distance, " +
         " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dpr.car_count end) not_storage_car_count, " +
         " sum( case when dprl.receive_flag=1 or dprl.transfer_flag=1 then dpr.car_count end) storage_car_count, " +
         " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dpr.car_count end)*4 as enter_fee " +
@@ -245,7 +243,8 @@ function updateCarOilFee(params,callback){
 function updateTruckNum(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select t.id,t.truck_num,tr.number,t.brand_id,tb.brand_name," +
-        " t.operate_type,t.company_id,c.company_name,t.output_company_id,t.output_company_name " +
+        " t.operate_type,t.company_id,c.company_name,t.output_company_id,t.output_company_name, " +
+        " tb.load_distance_oil,tb.no_load_distance_oil " +
         " from truck_info t " +
         " left join truck_info tr on t.rel_id = tr.id " +
         " left join truck_brand tb on t.brand_id = tb.id " +
@@ -255,7 +254,8 @@ function updateTruckNum(params,callback){
         " set dtmv.truck_num = tm.truck_num , dtmv.truck_number = tm.number, " +
         " dtmv.brand_id = tm.brand_id , dtmv.brand_name = tm.brand_name , dtmv.operate_type = tm.operate_type , " +
         " dtmv.company_id = tm.company_id , dtmv.company_name = tm.company_name , " +
-        " dtmv.output_company_id = tm.output_company_id , dtmv.output_company_name = tm.output_company_name ";
+        " dtmv.output_company_id = tm.output_company_id , dtmv.output_company_name = tm.output_company_name , " +
+        " dtmv.load_oil_distance = tm.load_distance_oil , dtmv.no_oil_distance = tm.no_load_distance_oil ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
