@@ -39,6 +39,15 @@ const updateTaskStatByDate = (params,callback) =>{
     });
 }
 
+const updateDemandByDate = (params,callback) => {
+    const query = "update dp_demand_info set demand_status=2 where pre_count = plan_count and demand_status =1  and date_id=?" ;
+    let paramArray=[],i=0;
+    paramArray[i]=params.dateId;
+    db.dbQuery(query,paramArray,(error,result)=>{
+        logger.debug(' updateDemandByDate ')
+        callback(error,result)
+    });
+}
 module.exports = {
-    queryTaskStat , updateTaskStat ,updateTaskStatByDate
+    queryTaskStat , updateTaskStat ,updateTaskStatByDate ,updateDemandByDate
 }

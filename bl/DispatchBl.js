@@ -64,6 +64,22 @@ const completeTaskStatByDate  = ()=>{
     })
 }
 
+const completeDemandInfoByDate = ()=>{
+    let dateLineTime = new Date().getTime() - 24*60*60*1000;
+    let dateLine = new Date(dateLineTime);
+    const dateId = moment(dateLine).format('YYYYMMDD');
+    let paramsObj = {
+        dateId : dateId
+    }
+    dispatchDao.updateDemandByDate(paramsObj,(error,result)=>{
+        if(error){
+            logger.error("completeDemandInfoByDate" + error.message);
+        }else{
+            logger.info("completeDemandInfoByDate success "+result.affectedRows);
+        }
+    })
+}
+
 module.exports = {
-    completeTaskStat,completeTaskStatByDate
+    completeTaskStat,completeTaskStatByDate ,completeDemandInfoByDate
 }

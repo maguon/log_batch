@@ -73,6 +73,17 @@ try{
                 }
             }
         })
+        dispatchBl.completeDemandInfoByDate((err,result) =>{
+            if(err){
+                logger.error('completeTaskStat error:'+err.stack);
+            }else{
+                if(result && result.affectedRows){
+                    logger.info('completeDemand success');
+                }else{
+                    logger.info('completeDemand false');
+                }
+            }
+        })
     },startSched);
 }catch(err){
     logger.error(err.stack);
