@@ -65,7 +65,7 @@ const completeTaskStatByDate  = ()=>{
 }
 
 const completeDemandInfoByDate = ()=>{
-    let dateLineTime = new Date().getTime() - 24*60*60*1000;
+    let dateLineTime = new Date().getTime() - 7*24*60*60*1000;
     let dateLine = new Date(dateLineTime);
     const dateId = moment(dateLine).format('YYYYMMDD');
     let paramsObj = {
