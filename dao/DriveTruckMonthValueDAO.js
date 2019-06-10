@@ -6,22 +6,18 @@ const db=require('../db/connection/MysqlDb.js');
 const serverLogger = require('../util/ServerLogger.js');
 const logger = serverLogger.createLogger('DriveTruckMonthValueDAO.js');
 
+
 function addDistance(params,callback){
     var query = " insert into drive_truck_month_value" +
-        " (y_month,drive_id,truck_id,reverse_count,load_distance,no_load_distance,distance," +
-        " receive_car_count,storage_car_count,enter_fee) " +
+        " (y_month,drive_id,truck_id,reverse_count,load_distance,no_load_distance,distance) " +
         " select "+params.yMonth+",dpr.drive_id,dpr.truck_id, " +
         " count(case when dpr.reverse_flag = 1 then dpr.id end) as reverse_count, " +
         " sum(case when dpr.load_flag = 1 then dpr.distance end) as load_distance, " +
         " sum(case when dpr.load_flag = 0 then dpr.distance end) as no_load_distance, " +
-        " sum(dpr.distance) as distance, " +
-        " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end) not_storage_car_count, " +
-        " sum( case when dprl.receive_flag=1 or dprl.transfer_flag=1 then dprl.real_count end) storage_car_count, " +
-        " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end)*4 as enter_fee " +
+        " sum(dpr.distance) as distance " +
         " from dp_route_task dpr " +
         " left join truck_info t on dpr.truck_id = t.id " +
         " left join truck_brand tb on t.brand_id = tb.id " +
-        " left join dp_route_load_task dprl on dpr.id = dprl.dp_route_task_id " +
         " where dpr.task_status >=9 " +
         " and dpr.task_plan_date>="+params.yMonth+"01 and dpr.task_plan_date<=" +params.yMonth+"31"+
         " group by dpr.drive_id,dpr.truck_id ";
@@ -29,6 +25,27 @@ function addDistance(params,callback){
 
     db.dbQuery(query,paramsArray,function(error,rows){
         logger.debug(' addDistance ');
+        return callback(error,rows);
+    });
+}
+
+function updateStorageCarCount(params,callback){
+    var query = " update drive_truck_month_value dtmv inner join( " +
+        " select dpr.drive_id,dpr.truck_id, " +
+        " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end) not_storage_car_count, " +
+        " sum( case when dprl.receive_flag=1 or dprl.transfer_flag=1 then dprl.real_count end) storage_car_count, " +
+        " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end)*4 as enter_fee " +
+        " from dp_route_task dpr " +
+        " left join dp_route_load_task dprl on dpr.id = dprl.dp_route_task_id " +
+        " where dpr.task_status >=9 and dpr.task_plan_date>="+params.yMonth+"01 and dpr.task_plan_date<="+params.yMonth+"31 " +
+        " group by dpr.drive_id,dpr.truck_id) dprm " +
+        " on dtmv.drive_id = dprm.drive_id and dtmv.truck_id = dprm.truck_id and dtmv.y_month = " +params.yMonth+
+        " set dtmv.receive_car_count = dprm.not_storage_car_count, " +
+        " dtmv.storage_car_count = dprm.storage_car_count , dtmv.enter_fee = dprm.enter_fee";
+    var paramsArray=[],i=0;
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateStorageCarCount ');
         return callback(error,rows);
     });
 }
@@ -366,6 +383,7 @@ function deleteDriveTruckMonthValue(params,callback){
 
 module.exports ={
     addDistance : addDistance,
+    updateStorageCarCount : updateStorageCarCount,
     updateOutput : updateOutput,
     updateInsureFee : updateInsureFee,
     updateDistanceSalary : updateDistanceSalary,

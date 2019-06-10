@@ -13,10 +13,10 @@ var logger = serverLogger.createLogger('DriveTruckMonthValue.js');
 var moment = require('moment/moment.js');
 
 
-function createDriveTruckMonthValue(){
-    var params = {} ;
+
+function createDriveTruckMonthValue(req,res,next){
+    var params = req.params ;
     var myDate = new Date();
-    //var yMonthDay = new Date(myDate);
     var yMonthDay = new Date(myDate-30*24*60*60*1000);
     var yMonth = moment(yMonthDay).format('YYYYMM');
     Seq().seq(function(){
@@ -25,8 +25,8 @@ function createDriveTruckMonthValue(){
         driveTruckMonthValueDAO.addDistance(params,function(error,result){
             if (error) {
                 if(error.message.indexOf("Duplicate") > 0) {
-                    logger.error('duplicate')
-                    throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+                    resUtil.resetFailedRes(res, "数据已经存在");
+                    return next();
                 } else{
                     logger.error(' createDriveTruckMonthValue ' + error.message);
                     throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
@@ -36,6 +36,22 @@ function createDriveTruckMonthValue(){
                     logger.info(' createDriveTruckMonthValue ' + 'success');
                 }else{
                     logger.warn(' createDriveTruckMonthValue ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function () {
+        var that = this;
+        params.yMonth = yMonth;
+        driveTruckMonthValueDAO.updateStorageCarCount(params,function(err,result){
+            if (err) {
+                logger.error(' updateStorageCarCount ' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' updateStorageCarCount ' + 'success');
+                }else{
+                    logger.warn(' updateStorageCarCount ' + 'failed');
                 }
                 that();
             }
@@ -240,7 +256,8 @@ function createDriveTruckMonthValue(){
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 logger.info(' updateDrive ' + 'success');
-
+                resUtil.resetUpdateRes(res,result,null);
+                return next();
             }
         })
     })
