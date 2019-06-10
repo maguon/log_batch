@@ -256,8 +256,6 @@ function createDriveTruckMonthValue(req,res,next){
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 logger.info(' updateDrive ' + 'success');
-                resUtil.resetUpdateRes(res,result,null);
-                return next();
             }
         })
     })
