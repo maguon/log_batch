@@ -58,7 +58,7 @@ function updateOutput(params,callback){
         " left join dp_route_load_task drlt on drlt.id = drltd.dp_route_load_task_id " +
         " left join car_info ci on drltd.car_id = ci.id " +
         " left join entrust_city_route_rel ecrr on ci.entrust_id = ecrr.entrust_id " +
-        " and ci.make_id = ecrr.make_id and ci.route_id = ecrr.city_route_id " +
+        " and ci.make_id = ecrr.make_id and ci.route_start_id = ecrr.route_start_id and ci.route_end_id = ecrr.route_end_id " +
         " and ci.size_type =ecrr.size_type  " +
         " where dprt.task_plan_date>= "+params.yMonth+"01 and dprt.task_plan_date<="+params.yMonth+"31 " +
         " and dprt.task_status >=9 " +
