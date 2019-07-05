@@ -2,6 +2,7 @@
  * Created by zwl on 2019/5/29.
  */
 
+const moment = require('moment');
 const db=require('../db/connection/MysqlDb.js');
 const serverLogger = require('../util/ServerLogger.js');
 const logger = serverLogger.createLogger('DriveTruckMonthValueDAO.js');
@@ -74,13 +75,14 @@ function updateOutput(params,callback){
 }
 
 function updateInsureFee(params,callback){
+    var lastDay = moment(params.yMonth+'01').endOf('month').format("YYYYMMDD");
     var query = " update drive_truck_month_value dtmv inner join( " +
-        " select truck_id, sum(case when start_date<="+params.yMonth+"01 and end_date>="+params.yMonth+"31 then 30/DateDiff(end_date,start_date)*insure_money " +
-        " when (start_date<="+params.yMonth+"01 and end_date<="+params.yMonth+"31 and end_date>="+params.yMonth+"01) then DateDiff(end_date,"+params.yMonth+"01)/DateDiff(end_date,start_date)*insure_money " +
-        " when (start_date>="+params.yMonth+"01 and start_date<="+params.yMonth+"31 and end_date>="+params.yMonth+"31) then DateDiff("+params.yMonth+"31,start_date)/DateDiff(end_date,start_date)*insure_money end) month_insure" +
+        " select truck_id, sum(case when start_date<="+params.yMonth+"01 and end_date>="+lastDay+" then 30/DateDiff(end_date,start_date)*insure_money " +
+        " when (start_date<="+params.yMonth+"01 and end_date<="+lastDay+" and end_date>="+params.yMonth+"01) then DateDiff(end_date,"+params.yMonth+"01)/DateDiff(end_date,start_date)*insure_money " +
+        " when (start_date>="+params.yMonth+"01 and start_date<="+lastDay+" and end_date>="+lastDay+") then DateDiff("+lastDay+",start_date)/DateDiff(end_date,start_date)*insure_money end) month_insure" +
         " from truck_insure_rel " +
-        " where (start_date<="+params.yMonth+"01 and end_date>="+params.yMonth+"31) or (start_date<="+params.yMonth+"01 and end_date<="+params.yMonth+"31 and end_date>="+params.yMonth+"01) " +
-        " or (start_date>="+params.yMonth+"01 and start_date<="+params.yMonth+"31 and end_date>="+params.yMonth+"31) " +
+        " where (start_date<="+params.yMonth+"01 and end_date>="+lastDay+") or (start_date<="+params.yMonth+"01 and end_date<="+lastDay+" and end_date>="+params.yMonth+"01) " +
+        " or (start_date>="+params.yMonth+"01 and start_date<="+lastDay+" and end_date>="+lastDay+") " +
         " group by truck_id) tir " +
         " on dtmv.truck_id = tir.truck_id " +
         " and dtmv.y_month = "+params.yMonth+" set dtmv.insure_fee = tir.month_insure ";
