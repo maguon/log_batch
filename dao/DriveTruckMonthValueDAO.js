@@ -219,7 +219,7 @@ function updatePeccancy(params,callback){
         " from drive_peccancy dp " +
         " where dp.date_id>="+params.yMonth+"01 and dp.date_id<= "+params.yMonth+"31 " +
         " group by dp.drive_id,dp.truck_id) dpm " +
-        " on dtmv.drive_id = dpm.drive_id and dtmv.truck_id = dpm.truck_id and dtmv.y_month = 201905  "+
+        " on dtmv.drive_id = dpm.drive_id and dtmv.truck_id = dpm.truck_id and dtmv.y_month =   "+params.yMonth+
         " set dtmv.peccancy_under_fee = dpm.peccancy_under_fee , dtmv.peccancy_company_fee = dpm.peccancy_company_fee ";
     var paramsArray=[],i=0;
 
