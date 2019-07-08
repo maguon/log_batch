@@ -214,10 +214,11 @@ function updateOilFee(params,callback){
 }
 
 function updatePeccancy(params,callback){
+    var lastDay = moment(params.yMonth+'01').endOf('month').format("YYYYMMDD");
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select dp.drive_id,dp.truck_id,sum(dp.under_money) peccancy_under_fee,sum(dp.company_money) peccancy_company_fee " +
         " from drive_peccancy dp " +
-        " where dp.date_id>="+params.yMonth+"01 and dp.date_id<= "+params.yMonth+"31 " +
+        " where dp.handle_date>="+params.yMonth+"01 and dp.handle_date<= "+lastDay +
         " group by dp.drive_id,dp.truck_id) dpm " +
         " on dtmv.drive_id = dpm.drive_id and dtmv.truck_id = dpm.truck_id and dtmv.y_month =   "+params.yMonth+
         " set dtmv.peccancy_under_fee = dpm.peccancy_under_fee , dtmv.peccancy_company_fee = dpm.peccancy_company_fee ";
