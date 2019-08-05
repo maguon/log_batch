@@ -250,13 +250,13 @@ function updateRepair(params,callback){
 function updateCarOilFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select dprtf.drive_id,dprtf.truck_id,sum(dprtf.car_oil_fee) car_oil_fee,sum(dprtf.car_total_price) car_parking_total_fee," +
-        " sum(dprtf.total_price) truck_parking_fee " +
+        " sum(dprtf.total_price) truck_parking_fee,sum(dprtf.other_fee) other_fee " +
         " from dp_route_task_fee dprtf " +
         " where dprtf.date_id>="+params.yMonth+"01 and dprtf.date_id<="+params.yMonth+"31 and dprtf.status=2 " +
         " group by dprtf.drive_id,dprtf.truck_id) dprtfm " +
         " on dtmv.drive_id = dprtfm.drive_id and dtmv.truck_id = dprtfm.truck_id and dtmv.y_month = " +params.yMonth+
         " set dtmv.car_oil_fee = dprtfm.car_oil_fee , dtmv.car_parking_total_fee = dprtfm.car_parking_total_fee , " +
-        " dtmv.truck_parking_fee = dprtfm.truck_parking_fee ";
+        " dtmv.truck_parking_fee = dprtfm.truck_parking_fee , dtmv.other_fee = dprtfm.other_fee ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
