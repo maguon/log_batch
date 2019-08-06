@@ -185,7 +185,7 @@ function updateEtcFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select te.drive_id,te.truck_id,sum(te.etc_fee) etc_fee " +
         " from truck_etc te " +
-        " where te.date_id>="+params.yMonth+"01 and te.date_id<= "+params.yMonth+"31 " +
+        " where te.payment_status = 1 and te.date_id>="+params.yMonth+"01 and te.date_id<= "+params.yMonth+"31 " +
         " group by te.drive_id,te.truck_id) tem " +
         " on dtmv.drive_id = tem.drive_id and dtmv.truck_id = tem.truck_id " +
         " and dtmv.y_month = "+params.yMonth+" set dtmv.etc_fee = tem.etc_fee ";
@@ -201,7 +201,7 @@ function updateOilFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select deor.drive_id,deor.truck_id,sum(deor.oil_money) oil_fee,sum(deor.urea_money) urea_fee " +
         " from drive_exceed_oil_rel deor " +
-        " where deor.date_id>="+params.yMonth+"01 and deor.date_id<="+params.yMonth+"31 " +
+        " where deor.payment_status = 1 and deor.date_id>="+params.yMonth+"01 and deor.date_id<="+params.yMonth+"31 " +
         " group by deor.drive_id,deor.truck_id) deorm " +
         " on dtmv.drive_id = deorm.drive_id and dtmv.truck_id = deorm.truck_id and dtmv.y_month = " +params.yMonth+
         " set dtmv.oil_fee = deorm.oil_fee , dtmv.urea_fee = deorm.urea_fee ";
@@ -235,7 +235,7 @@ function updateRepair(params,callback){
         " select trr.drive_id,trr.truck_id,sum(trr.repair_money) repair_fee, " +
         " sum(trr.parts_money) parts_fee,sum(trr.maintain_money) maintain_fee " +
         " from truck_repair_rel trr " +
-        " where trr.date_id>="+params.yMonth+"01 and trr.date_id<="+params.yMonth+"31 and trr.repair_status =1 " +
+        " where trr.payment_status = 1 and trr.date_id>="+params.yMonth+"01 and trr.date_id<="+params.yMonth+"31 and trr.repair_status =1 " +
         " group by trr.drive_id,trr.truck_id) trrm " +
         " on dtmv.drive_id = trrm.drive_id and dtmv.truck_id = trrm.truck_id and dtmv.y_month = " +params.yMonth+
         " set dtmv.repair_fee = trrm.repair_fee , dtmv.parts_fee = trrm.parts_fee , dtmv.maintain_fee = trrm.maintain_fee ";
