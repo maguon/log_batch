@@ -22,6 +22,22 @@ function createDriveTruckMonthValue(req,res,next){
     Seq().seq(function(){
         var that = this;
         params.yMonth = yMonth;
+        driveTruckMonthValueDAO.deleteDriveTruckMonthValue(params,function(error,result){
+            if (error) {
+                logger.error(' deleteDriveTruckMonthValue ' + error.message);
+                throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' deleteDriveTruckMonthValue ' + 'success');
+                }else{
+                    logger.warn(' deleteDriveTruckMonthValue ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function(){
+        var that = this;
+        params.yMonth = yMonth;
         driveTruckMonthValueDAO.addDistance(params,function(error,result){
             if (error) {
                 if(error.message.indexOf("Duplicate") > 0) {
