@@ -6,7 +6,7 @@
         "later"	: "*",
         "log4js": "*",
         "moment": "2.18.1",
-        "mongoose": "4.9.4",
+        "mongoose": "5.7.7",
         "mysql": "*",
         "promise" : "8.0.0" ,
         "posix-getopt": "1.0.0",
