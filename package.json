@@ -5,7 +5,7 @@
         "assert-plus": "*",
         "later"	: "*",
         "log4js": "*",
-        "moment": "2.18.1",
+        "moment": "2.24.0",
         "mongoose": "4.9.4",
         "mysql": "*",
         "promise" : "8.0.0" ,
