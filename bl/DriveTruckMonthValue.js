@@ -17,7 +17,7 @@ var moment = require('moment/moment.js');
 function createDriveTruckMonthValue(req,res,next){
     var params = {} ;
     var myDate = new Date();
-    var yMonthDay = new Date(myDate-30*24*60*60*1000);
+    var yMonthDay = new Date(myDate-3*24*60*60*1000);
     var yMonth = moment(yMonthDay).format('YYYYMM');
     Seq().seq(function(){
         var that = this;
