@@ -13,7 +13,7 @@ Seq().seq(function () {
     var that =this;
     dispatchDAO.getUpDistanceTask({},function(error,rows){
         if (error) {
-            logger.error(' deleteDriveTruckMonthValue ' + error.message);
+            logger.error(' getUpDistanceTask ' + error.message);
             throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
         } else {
             Seq(rows).seqEach(function(rowObj,i){
@@ -22,7 +22,7 @@ Seq().seq(function () {
                 console.log(rowObj.id);
                 dispatchDAO.getRouteRecord({id:rowObj.id},function(error,rows){
                     if (error) {
-                        logger.error(' deleteDriveTruckMonthValue ' + error.message);
+                        logger.error(' getUpRecord ' + error.message);
                         throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
                     } else {
                         const strArray = rows[0].comment;
