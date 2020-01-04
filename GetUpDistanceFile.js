@@ -28,7 +28,7 @@ Seq().seq(function () {
                         const strArray = rows[0].comment;
                         let strTmp = '';
                         strArray.forEach((obj,i)=>{
-                            strTmp += moment(obj.timez).format('YYYY-MM-DD HH:mm:ss'); + ' ' +obj.name +' '+obj.content +' |';
+                            strTmp += moment(obj.timez).format('YYYY-MM-DD HH:mm:ss') + ' ' +obj.name +' '+obj.content +' |';
                             console.log(obj);
                         })
 
