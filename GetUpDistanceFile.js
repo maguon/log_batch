@@ -5,6 +5,7 @@ const sysError = require('./util/SystemError.js');
 const serverLogger = require('./util/ServerLogger.js');
 const logger = serverLogger.createLogger('GetUpDistanceFile.js');
 const dispatchDAO = require('./dao/DispatchDAO');
+const moment = require('moment');
 
 
 let csvString = ''
@@ -29,6 +30,7 @@ Seq().seq(function () {
                             strTmp += moment(obj.timez).format('YYYY-MM-DD HH:mm:ss'); + ' ' +obj.name +' '+obj.content +' |';
                         })
                         csvString += strTmp +'\r\n';
+                        logger.info(strTmp);
                         that(null,i);
                     }
                 })
