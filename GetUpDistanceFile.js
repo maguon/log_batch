@@ -20,7 +20,7 @@ Seq().seq(function () {
                 var that = this;
                 csvString += rowObj.id+',';
                 console.log(rowObj.id);
-                dispatchDAO.getRouteRecord({id:rowObj.id},function(error,rows){
+                dispatchDAO.getRouteRecord({routeId:rowObj.id},function(error,rows){
                     if (error) {
                         logger.error(' getUpRecord ' + error.message);
                         throw sysError.InternalError(error.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
