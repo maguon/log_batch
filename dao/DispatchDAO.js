@@ -1,5 +1,16 @@
 'use strict'
 const db = require('../db/connection/MysqlDb.js');
+const mongoose = require('../db/connection/MongoCon.js').getMongo();
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
+const routeRecord = new Schema({
+    id : Number ,
+    comment : {type: Array},
+    status : Number,
+    created_on : {type:Date ,default : Date.now()}
+});
+
+const recordModel = mongoose.model('route_record', routeRecord);
 
 const serverLogger = require('../util/ServerLogger.js');
 const logger = serverLogger.createLogger('DispatchDAO.js');
@@ -48,6 +59,34 @@ const updateDemandByDate = (params,callback) => {
         callback(error,result)
     });
 }
+
+const getUpDistanceTask = (params,callback) =>{
+    const query = "select id from dp_route_task where task_plan_date>='2019-10-01' and task_status=10 and up_distance_count>0" ;
+    let paramArray=[],i=0;
+    db.dbQuery(query,paramArray,(error,result)=>{
+        logger.debug(' getUpDistanceTask ')
+        callback(error,result)
+    });
+}
+
+const getRouteRecord = (params,callback)=>{
+
+    let query = recordModel.find({}).select('_id id comment status created_on');
+    if(params.recordId){
+        query.where('_id').equals(params.recordId);
+    }
+    if(params.routeId){
+        query.where('id').equals(params.routeId);
+    }
+    if(params.start&&params.size){
+        query.skip(parseInt(params.start)).limit(parseInt(params.size));
+    }
+    query.sort('-created_on').exec((err,rows)=>{
+        logger.debug(' getRouteRecord ') ;
+        callback(err,rows);
+    })
+}
+
 module.exports = {
-    queryTaskStat , updateTaskStat ,updateTaskStatByDate ,updateDemandByDate
+    queryTaskStat , updateTaskStat ,updateTaskStatByDate ,updateDemandByDate,getUpDistanceTask ,getRouteRecord
 }
