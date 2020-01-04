@@ -61,7 +61,7 @@ const updateDemandByDate = (params,callback) => {
 }
 
 const getUpDistanceTask = (params,callback) =>{
-    const query = "select id from dp_route_task where task_plan_date>='2019-10-01' and task_plan_date<='2019-10-31' and task_status=10 and up_distance_count>0" ;
+    const query = "select id from dp_route_task where task_plan_date>='2019-10-01'  and task_status=10 and up_distance_count>0" ;
     let paramArray=[],i=0;
     db.dbQuery(query,paramArray,(error,result)=>{
         logger.debug(' getUpDistanceTask ')
