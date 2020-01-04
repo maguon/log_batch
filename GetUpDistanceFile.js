@@ -29,6 +29,7 @@ Seq().seq(function () {
                         strArray.forEach((obj,i)=>{
                             strTmp += moment(obj.timez).format('YYYY-MM-DD HH:mm:ss'); + ' ' +obj.name +' '+obj.content +' |';
                         })
+                        console.log(obj);
                         csvString += strTmp +'\r\n';
                         logger.info(strTmp);
                         that(null,i);
