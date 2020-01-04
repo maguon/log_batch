@@ -19,6 +19,7 @@ Seq().seq(function () {
             Seq(rows).seqEach(function(rowObj,i){
                 var that = this;
                 csvString += rowObj.id+',';
+                console.log(rowObj.id);
                 dispatchDAO.getRouteRecord({id:rowObj.id},function(error,rows){
                     if (error) {
                         logger.error(' deleteDriveTruckMonthValue ' + error.message);
