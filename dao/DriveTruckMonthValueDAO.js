@@ -169,7 +169,7 @@ function updateCleanFee(params,callback){
 
 function updateHotelFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
-        " select drive_id,truck_id,sum(work_count) work_count,sum(hotel_fee) hotel_fee " +
+        " select drive_id,truck_id,sum(work_count) work_count,sum(hotel_bonus) hotel_fee " +
         " from drive_work " +
         " where y_month = " +params.yMonth+
         " group by drive_id,truck_id) dw on dtmv.drive_id = dw.drive_id and dtmv.truck_id = dw.truck_id" +
