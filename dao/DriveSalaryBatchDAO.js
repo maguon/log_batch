@@ -17,7 +17,7 @@ function addDriveSalaryBatch(params, callback) {
         " LEFT JOIN drive_info di ON di.id = dtt.drive_id" +
         // 商品车质损相关
         " UNION" +
-        " SELECT" + params.yMonth + "as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
+        " SELECT " + params.yMonth + " as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
         " FROM damage_check dc" +
         " LEFT JOIN drive_info di on dc.under_user_id = di.user_id" +
         " LEFT JOIN damage_info dai on dc.damage_id = dai.id" +
