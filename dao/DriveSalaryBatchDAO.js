@@ -9,7 +9,7 @@ function addDriveSalaryBatch(params, callback) {
         // 费用申请 + 洗车费相关 + 杂费相关 + 暂扣款
         " SELECT " + params.yMonth + " as month_date_id, dtt.drive_id, di.company_id, di.user_id" +
         " FROM ( " +
-        "    SELECT DISTINCT drive_id FROM dp_route_task WHERE task_plan_date>=" + params.monthStart + " AND task_plan_date<=" + params.monthEnd + " AND task_status=10" +
+        "    SELECT DISTINCT drive_id FROM dp_route_task WHERE task_plan_date>='" + params.monthStart + "' AND task_plan_date<='" + params.monthEnd + "' AND task_status=10" +
         "    UNION SELECT DISTINCT drive_id FROM drive_sundry_fee WHERE y_month=" + params.yMonth +
         "    UNION SELECT DISTINCT drive_id FROM drive_salary_retain WHERE y_month=" + params.yMonth +
         "    UNION SELECT DISTINCT drive_id FROM drive_work WHERE y_month=" + params.yMonth +
@@ -163,7 +163,7 @@ function updateRetainFfee(params, callback) {
         " INNER JOIN (" +
         "   SELECT drive_id, sum(damage_retain_fee) as damage_retain_fee, sum(damage_op_fee) as damage_op_fee, sum(truck_retain_fee) as truck_retain_fee" +
         "   FROM drive_salary_retain" +
-        "   WHERE y_month=" + params.yMonth +
+        "   WHERE y_month= " + params.yMonth +
         "   GROUP BY drive_id ) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
@@ -184,7 +184,7 @@ function updateDpRouteTaskFee(params, callback) {
         " INNER JOIN (" +
         "   SELECT drive_id, sum(car_oil_fee) as car_oil_fee, sum(total_price) as truck_parking_fee, sum(car_total_price) as car_parking_fee, sum(other_fee) as dp_other_fee" +
         "   FROM dp_route_task_fee" +
-        "   WHERE created_on>=" + params.monthStart + " AND created_on<=" + params.monthEnd + " AND status=2" +
+        "   WHERE created_on>='" + params.monthStart + "' AND created_on<='" + params.monthEnd + "' AND status=2" +
         "   GROUP BY drive_id ) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
@@ -206,7 +206,7 @@ function updateCleanFee(params, callback) {
         " INNER JOIN (" +
         "   SELECT drive_id, sum(actual_price) as clean_fee, sum(total_trailer_fee) as trailer_fee, sum(total_run_fee) as run_fee, sum(lead_fee) as lead_fee, sum(car_parking_fee) as car_pick_fee" +
         "   FROM dp_route_load_task_clean_rel" +
-        "   WHERE created_on>=" + params.monthStart + " AND created_on<=" + params.monthEnd + " AND status=2" +
+        "   WHERE created_on>='" + params.monthStart + "' AND created_on<='" + params.monthEnd + "' AND status=2" +
         "   GROUP BY drive_id ) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
@@ -243,7 +243,7 @@ function updateDistanceSalary(params, callback) {
         "      ELSE '0' END) distance_salary," +
         "      sum(CASE WHEN reverse_flag=1 then reverse_money ELSE '0' END) reverse_salary" +
         "   FROM dp_route_task " +
-        "   WHERE task_plan_date>=" + params.monthStart + " and task_plan_date<=" + params.monthEnd + " and task_status>=9 " +
+        "   WHERE task_plan_date>='" + params.monthStart + "' and task_plan_date<='" + params.monthEnd + "' and task_status>=9 " +
         "   GROUP BY drive_id) as base" +
         " ON ds.drive_id = base.drive_id" +
         " AND ds.month_date_id = " + params.yMonth +
@@ -264,7 +264,7 @@ function updateEnterFee(params, callback) {
         "   SELECT dpr.drive_id, sum(CASE WHEN dprl.receive_flag=0 and dprl.transfer_flag=0 THEN dprl.real_count ELSE '0' END)*4 as enter_fee" +
         "   FROM dp_route_load_task dprl" +
         "   LEFT JOIN dp_route_task dpr on dprl.dp_route_task_id = dpr.id" +
-        "   WHERE dpr.task_plan_date>=" + params.monthStart + " AND dpr.task_plan_date<=" + params.monthEnd + " AND dpr.task_status>=9" +
+        "   WHERE dpr.task_plan_date>='" + params.monthStart + "' AND dpr.task_plan_date<='" + params.monthEnd + "' AND dpr.task_status>=9" +
         "   GROUP BY dpr.drive_id) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
@@ -285,7 +285,7 @@ function updateLoadDistance(params, callback) {
         "   sum(CASE WHEN load_flag = 1 THEN distance ELSE '0' END) as load_distance," +
         "   sum(CASE WHEN load_flag = 0 THEN distance ELSE '0' END) as no_load_distance" +
         "   FROM dp_route_task" +
-        "   WHERE task_plan_date>=" + params.monthStart + " AND task_plan_date<=" + params.monthEnd + " AND task_status>=9" +
+        "   WHERE task_plan_date>='" + params.monthStart + "' AND task_plan_date<='" + params.monthEnd + "' AND task_status>=9" +
         "   GROUP BY drive_id) as base" +
         " ON ds.drive_id = base.drive_id" +
         " AND ds.month_date_id = " + params.yMonth +
@@ -301,7 +301,7 @@ function updateLoadDistance(params, callback) {
 
 // 删除指定月 所有数据
 function deleteDriveSalary(params,callback){
-    var query = " DELETE FROM drive_salary WHERE month_date_id = ? ";
+    var query = "DELETE FROM drive_salary WHERE month_date_id = ? ";
     var paramsArray=[],i=0;
     paramsArray[i++] = params.yMonth;
     db.dbQuery(query,paramsArray,function(error,rows){
