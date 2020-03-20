@@ -24,7 +24,7 @@ function addDriveSalaryBatch(params, callback) {
         " WHERE di.id is not null AND dai.date_id>=" + params.yMonth + "01 AND dai.date_id<=" + params.yMonth + "31 AND dai.damage_status =3 " +
         // 货车事故承担相关
         " UNION" +
-        " SELECT" + params.yMonth + "as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
+        " SELECT " + params.yMonth + " as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
         " FROM truck_accident_check tac" +
         " LEFT JOIN drive_info di on tac.under_user_id = di.user_id " +
         " LEFT JOIN truck_accident_info tai on tac.truck_accident_id = tai.id " +
