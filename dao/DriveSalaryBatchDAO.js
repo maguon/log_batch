@@ -204,10 +204,11 @@ function updateDpRouteTaskFee(params, callback) {
 function updateCleanFee(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
-        "   SELECT drive_id, sum(actual_price) as clean_fee, sum(total_trailer_fee) as trailer_fee, sum(total_run_fee) as run_fee, sum(lead_fee) as lead_fee, sum(car_parking_fee) as car_pick_fee" +
-        "   FROM dp_route_load_task_clean_rel" +
-        "   WHERE created_on>='" + params.monthStart + "' AND created_on<='" + params.monthEnd + "' AND status=2" +
-        "   GROUP BY drive_id ) as base" +
+        "   SELECT dpltcr.drive_id, sum(dpltcr.actual_price) as clean_fee, sum(dpltcr.total_trailer_fee) as trailer_fee, sum(dpltcr.total_run_fee) as run_fee, sum(dpltcr.lead_fee) as lead_fee, sum(dpltcr.car_parking_fee) as car_pick_fee" +
+        "   FROM dp_route_load_task_clean_rel dpltcr" +
+        "   LEFT JOIN dp_route_load_task dplt ON dplt.id = dpltcr.dp_route_load_task_id" +
+        "   WHERE dplt.load_date >= '" + params.monthStart + "' AND dplt.load_date <= '" + params.monthEnd + "' AND dpltcr.status=2" +
+        "   GROUP BY dpltcr.drive_id) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
         // 更新字段
