@@ -10,7 +10,11 @@ var moment = require('moment/moment.js');
 
 // 批量插入工资数据 按年月
 function createDriveSalaryBatch(req,res,next){
-    var params = req.params ;
+    var params = {} ;
+    var myDate = new Date();
+    var yMonthDay = new Date(myDate-30*24*60*60*1000);
+    var yMonth = moment(yMonthDay).format('YYYYMM');
+    params.yMonth = yMonth;
     params.monthStart = params.yMonth.substr(0,4) + '-' + params.yMonth.substr(4,2) + '-01';
     params.monthEnd = params.yMonth.substr(0,4) + '-' + params.yMonth.substr(4,2) + '-31';
     Seq().seq(function(){
