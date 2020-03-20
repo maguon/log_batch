@@ -7,7 +7,7 @@ function addDriveSalaryBatch(params, callback) {
     // 默认插入字段：月份, 司机ID, 公司ID， 用户ID
     var query = "INSERT INTO drive_salary(month_date_id, drive_id, company_id, user_id)" +
         // 费用申请 + 洗车费相关 + 杂费相关 + 暂扣款
-        " SELECT " + params.yMonth + "as month_date_id, dtt.drive_id, di.company_id, di.user_id" +
+        " SELECT " + params.yMonth + " as month_date_id, dtt.drive_id, di.company_id, di.user_id" +
         " FROM ( " +
         "    SELECT DISTINCT drive_id FROM dp_route_task WHERE task_plan_date>=" + params.monthStart + " AND task_plan_date<=" + params.monthEnd + " AND task_status=10" +
         "    UNION SELECT DISTINCT drive_id FROM drive_sundry_fee WHERE y_month=" + params.yMonth +
