@@ -99,7 +99,7 @@ function updatePeccancyUnderFee(params, callback) {
 function updateExceedOilFee(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
-        "   SELECT drive_id, sum(actual_money) as exceed_oil_fee" +
+        "   SELECT drive_id, sum(gps_actual_money) as exceed_oil_fee" +
         "   FROM drive_exceed_oil_date" +
         "   WHERE month_date_id=" + params.yMonth + " AND check_status=3" +
         "   GROUP BY drive_id ) as base" +
