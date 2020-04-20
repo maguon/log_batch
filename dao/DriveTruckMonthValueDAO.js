@@ -169,12 +169,12 @@ function updateCleanFee(params,callback){
 
 function updateHotelFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
-        " select drive_id,truck_id,sum(work_count) work_count,sum(hotel_bonus) hotel_fee " +
+        " select drive_id,truck_id,sum(work_count) work_count,sum(hotel_bonus) hotel_bonus ,sum(full_work_bonus) full_work_bonus,sum(other_bonus) other_bonus" +
         " from drive_work " +
         " where y_month = " +params.yMonth+
         " group by drive_id,truck_id) dw on dtmv.drive_id = dw.drive_id and dtmv.truck_id = dw.truck_id" +
         " and dtmv.y_month = "+params.yMonth+" " +
-        " set dtmv.work_count = dw.work_count , dtmv.hotel_fee = dw.hotel_fee ";
+        " set dtmv.work_count = dw.work_count , dtmv.hotel_bonus = dw.hotel_bonus ,dtmv.full_work_bonus=dw.full_work_bonus ,dtmv.other_bonus=dw.other_bonus";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
