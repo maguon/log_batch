@@ -231,6 +231,7 @@ function createDriveSalaryBatch(req,res,next){
             }
         })
     }).seq(function () {
+        var that= this;
         // 更新 重载，空载
         driveSalaryBatchDAO.updateLoadDistance(params,function(err,result){
             if (err) {
@@ -238,9 +239,21 @@ function createDriveSalaryBatch(req,res,next){
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 logger.info(' updateLoadDistance ' + 'success');
+                that();
             }
         })
-    })
+    }).seq(function(){
+        driveSalaryBatchDAO.updateDriveSalaryPersonalTax(params,function(err,result){
+            if (err) {
+                logger.error(' updateDriveSalaryPersonalTax ' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                logger.info(' updateDriveSalaryPersonalTax ' + 'success');
+                logger.info(' update driver salaery ' + 'completed');
+                
+            }
+        })
+    });
 }
 
 module.exports = {

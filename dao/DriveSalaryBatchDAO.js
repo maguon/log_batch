@@ -311,6 +311,30 @@ function deleteDriveSalary(params,callback){
     });
 }
 
+function updateDriveSalaryPersonalTax(params,callback){
+    var query = " update drive_salary set  " +
+        "actual_salary = IFNULL(distance_salary + reverse_salary + enter_fee " +
+        " - damage_under_fee - accident_fee - peccancy_under_fee - exceed_oil_fee " +
+        " + full_work_bonus + other_bonus " +
+        " - hotel_bonus - social_security_fee - food_fee - loan_fee " +
+        " - other_fee - damage_retain_fee - damage_op_fee - truck_retain_fee " +
+        " + car_oil_fee + truck_parking_fee + car_parking_fee + dp_other_fee " +
+        " + clean_fee  + trailer_fee + run_fee + lead_fee + car_pick_fee " +
+        " - personal_tax,0) " +
+        " where id is not null ";
+    var paramsArray=[],i=0;
+
+    if(params.yMonth){
+        paramsArray[i] = params.yMonth;
+        query = query + " and month_date_id = ? ";
+    }
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateDriveSalaryPersonalTax ');
+        return callback(error,rows);
+    });
+}
+
 module.exports = {
     addDriveSalaryBatch: addDriveSalaryBatch,
     updateDamageUnderFee: updateDamageUnderFee,
@@ -325,5 +349,6 @@ module.exports = {
     updateDistanceSalary: updateDistanceSalary,
     updateEnterFee: updateEnterFee,
     updateLoadDistance: updateLoadDistance,
-    deleteDriveSalary: deleteDriveSalary
+    deleteDriveSalary: deleteDriveSalary ,
+    updateDriveSalaryPersonalTax: updateDriveSalaryPersonalTax
 };
