@@ -6,15 +6,21 @@ var logger = serverLogger.createLogger('DriveSalaryBatchDAO.js');
 function addDriveSalaryBatch(params, callback) {
     // 默认插入字段：月份, 司机ID, 公司ID， 用户ID
     var query = "INSERT INTO drive_salary(month_date_id, drive_id, company_id, user_id)" +
-        // 费用申请 + 洗车费相关 + 杂费相关 + 暂扣款
+        // 洗车费相关 + 杂费相关 + 暂扣款
         " SELECT " + params.yMonth + " as month_date_id, dtt.drive_id, di.company_id, di.user_id" +
         " FROM ( " +
-        "    SELECT DISTINCT drive_id FROM dp_route_task WHERE task_plan_date>='" + params.monthStart + "' AND task_plan_date<='" + params.monthEnd + "' AND task_status=10 AND outer_flag=0 " +
+        "    SELECT DISTINCT drive_id FROM dp_route_task WHERE task_plan_date>='" + params.monthStart + "' AND task_plan_date<='" + params.monthEnd + "' AND task_status=10" +
         "    UNION SELECT DISTINCT drive_id FROM drive_sundry_fee WHERE y_month=" + params.yMonth +
         "    UNION SELECT DISTINCT drive_id FROM drive_salary_retain WHERE y_month=" + params.yMonth +
         "    UNION SELECT DISTINCT drive_id FROM drive_work WHERE y_month=" + params.yMonth +
         "    UNION SELECT DISTINCT drive_id FROM drive_peccancy WHERE date_id>=" + params.yMonth + "01 AND date_id<=" + params.yMonth + "31) as dtt" +
         " LEFT JOIN drive_info di ON di.id = dtt.drive_id" +
+        // 费用申请
+        " UNION" +
+        " SELECT " + params.yMonth + " as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
+        " FROM dp_route_task_fee drtf" +
+        " LEFT JOIN drive_info di on drtf.drive_id = di.id" +
+        " WHERE drtf.drive_id is not null AND drtf.created_on>='" + params.monthStart + " 00:00:00' AND drtf.created_on<='" + params.monthEnd + " 23:59:59' AND drtf.status=2" +
         // 商品车质损相关
         " UNION" +
         " SELECT " + params.yMonth + " as month_date_id, di.id as drive_id, di.company_id, di.user_id " +
