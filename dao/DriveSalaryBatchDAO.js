@@ -184,7 +184,7 @@ function updateDpRouteTaskFee(params, callback) {
         " INNER JOIN (" +
         "   SELECT drive_id, sum(car_oil_fee) as car_oil_fee, sum(total_price) as truck_parking_fee, sum(car_total_price) as car_parking_fee, sum(other_fee) as dp_other_fee" +
         "   FROM dp_route_task_fee" +
-        "   WHERE created_on>='" + params.monthStart + "' AND created_on<='" + params.monthEnd + "' AND status=2" +
+        "   WHERE created_on>='" + params.monthStart + " 00:00:00 ' AND created_on<='" + params.monthEnd + " 23:59:59' AND status=2" +
         "   GROUP BY drive_id ) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
@@ -207,7 +207,7 @@ function updateCleanFee(params, callback) {
         "   SELECT dpltcr.drive_id, sum(dpltcr.actual_price) as clean_fee, sum(dpltcr.total_trailer_fee) as trailer_fee, sum(dpltcr.total_run_fee) as run_fee, sum(dpltcr.lead_fee) as lead_fee, sum(dpltcr.car_parking_fee) as car_pick_fee" +
         "   FROM dp_route_load_task_clean_rel dpltcr" +
         "   LEFT JOIN dp_route_load_task dplt ON dplt.id = dpltcr.dp_route_load_task_id" +
-        "   WHERE dplt.load_date >= '" + params.monthStart + "' AND dplt.load_date <= '" + params.monthEnd + "' AND dpltcr.status=2" +
+        "   WHERE dplt.load_date >= '" + params.monthStart + " 00:00:00' AND dplt.load_date <= '" + params.monthEnd + "23:59:59' AND dpltcr.status=2" +
         "   GROUP BY dpltcr.drive_id) as base" +
         " ON ds.drive_id = base.drive_id " +
         " AND ds.month_date_id = " + params.yMonth +
