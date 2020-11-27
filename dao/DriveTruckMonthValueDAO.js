@@ -108,8 +108,7 @@ function updateDistanceSalary(params,callback){
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=6 then dpr.distance*0.8 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=7 then dpr.distance*0.9 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=8 then dpr.distance " +
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=9 then dpr.distance*1.1 " +
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count>=10 then dpr.distance*1.2 " +
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count>=9 then dpr.distance*1.4 "
         " end) distance_salary, " +
         " sum(case when dpr.reverse_flag=1 then dpr.reverse_money end) reverse_salary " +
         " from dp_route_task dpr " +

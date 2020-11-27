@@ -245,8 +245,7 @@ function updateDistanceSalary(params, callback) {
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=6 then distance*0.8" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=7 then distance*0.9" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=8 then distance" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=9 then distance*1.1" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count>=10 then distance*1.2" +
+        "      WHEN reverse_flag=0 and truck_number=8 and car_count>=9 then distance*1.4" +
         "      ELSE '0' END) distance_salary," +
         "      sum(CASE WHEN reverse_flag=1 then reverse_money ELSE '0' END) reverse_salary" +
         "   FROM dp_route_task " +
