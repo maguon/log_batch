@@ -53,7 +53,8 @@ function updateStorageCarCount(params,callback){
 
 function updateOutput(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
-        " select dprt.drive_id,dprt.truck_id,sum(ecrr.fee*ecrr.distance*drlt.output_ratio) output " +
+        " select dprt.drive_id,dprt.truck_id,sum(ecrr.fee*ecrr.distance*drlt.output_ratio) output, " +
+        " sum(ecrr.two_fee*ecrr.two_distance*drlt.output_ratio) two_output " +
         " from dp_route_task dprt " +
         " left join dp_route_load_task_detail drltd on drltd.dp_route_task_id = dprt.id " +
         " left join dp_route_load_task drlt on drlt.id = drltd.dp_route_load_task_id " +
@@ -65,7 +66,7 @@ function updateOutput(params,callback){
         " and dprt.task_status >=9 " +
         " group by dprt.drive_id,dprt.truck_id) dprm " +
         " on dtmv.drive_id = dprm.drive_id and dtmv.truck_id = dprm.truck_id " +
-        " and dtmv.y_month = "+params.yMonth+" set dtmv.output = dprm.output ";
+        " and dtmv.y_month = "+params.yMonth+" set dtmv.output = dprm.output , dtmv.two_output = dprm.two_output ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
