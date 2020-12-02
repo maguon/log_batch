@@ -9,7 +9,7 @@ const moment = require('moment');
 const db = require('./db/connection/MysqlDb.js');
 const updateTwoOutputByMonth = (params,callback) => {
     const yMonth =process.argv[3];
-    console.log('update '+yMonth);
+    logger.info('update '+yMonth);
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select dprt.drive_id,dprt.truck_id, " +
         " sum(ecrr.two_fee*ecrr.two_distance*drlt.output_ratio) two_output " +
@@ -29,7 +29,7 @@ const updateTwoOutputByMonth = (params,callback) => {
 
     db.dbQuery(query,paramsArray,function(error,rows){
         logger.debug(' updateTwoOutputByMonth ');
-       console.log(error||rows);
+       logger.info(error||rows);
     });
 }
 
