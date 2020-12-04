@@ -314,8 +314,8 @@ function createDriveTruckMonthValue(yMonth){
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 logger.info(' updatePerCarCleanFeeCount ' + 'success');
-                resUtil.resetUpdateRes(res,result,null);
-                return next();
+                logger.info('complete company month stat');
+                process.exit(1);
             }
         })
     })
