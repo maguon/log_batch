@@ -97,7 +97,7 @@ function updateOuterCarCount(params,callback) {
         " WHERE ci.id is not null " +
         " AND ci.order_date_id >= " + params.yMonth + "01 " +
         " AND ci.order_date_id <= " + params.yMonth + "31 " +
-        " AND ci.car_status = 9 " +
+        " AND ci.car_status = 1 " +
         " AND ci.company_id > 0 ) cim " +
         " ON tms.y_month = " + params.yMonth  +
         " SET tms.outer_car_count = tms.outer_car_count + cim.countCar, " +
@@ -146,7 +146,7 @@ function updateOuterOutput(params,callback) {
         " WHERE ci.id is not null " +
         " AND ci.order_date_id >= " + params.yMonth + "01 " +
         " AND ci.order_date_id <= " + params.yMonth + "31 " +
-        " AND ci.car_status = 9 " +
+        " AND ci.car_status = 1 " +
         " AND ci.company_id > 0 " +
         " AND ci.entrust_id = sc.entrust_id " +
         " AND ci.route_start_id = sc.route_start_id " +
