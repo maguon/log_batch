@@ -7,6 +7,7 @@ var sysError = require('../util/SystemError.js');
 var resUtil = require('../util/ResponseUtil.js');
 var totalMonthStatDAO = require('../dao/TotalMonthStatDAO.js');
 var Seq = require('seq');
+var moment = require('moment/moment.js');
 var serverLogger = require('../util/ServerLogger.js');
 var logger = serverLogger.createLogger('TotalMonthStatDAO.js');
 
