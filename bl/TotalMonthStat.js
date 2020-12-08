@@ -245,6 +245,8 @@ function createDriveTruckMonthValue(yMonth){
     }).seq(function () {
         var that = this;
         //洗车费
+        params.startDate = params.yMonth.substr(0,4) + '-' + params.yMonth.substr(4,2) + '-01';
+        params.lastDateTime = moment(params.yMonth+'01').endOf('month').format("YYYY-MM-DD") ;
         totalMonthStatDAO.updateCleanFeeCount(params,function(err,result){
             if (err) {
                 logger.error(' updateCleanFeeCount ' + err.message);
@@ -307,6 +309,22 @@ function createDriveTruckMonthValue(yMonth){
             }
         })
     }).seq(function () {
+        var that = this;
+        //质损率
+        totalMonthStatDAO.updateDamageRatioCount(params,function(err,result){
+            if (err) {
+                logger.error(' updateDamageRatioCount ' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' updateDamageRatioCount ' + 'success');
+                }else{
+                    logger.warn(' updateDamageRatioCount ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function () {
         //单车洗车费
         totalMonthStatDAO.updatePerCarCleanFeeCount(params,function(err,result){
             if (err) {
@@ -314,8 +332,6 @@ function createDriveTruckMonthValue(yMonth){
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 logger.info(' updatePerCarCleanFeeCount ' + 'success');
-                logger.info('complete company month stat');
-                process.exit(1);
             }
         })
     })

@@ -18,7 +18,7 @@ function addTotalMonthStat(params,callback){
     });
 }
 
-//商品车数�?
+//商品车数量
 function updateCarCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT count( ci.id ) car_count " +
@@ -38,7 +38,7 @@ function updateCarCount(params,callback) {
     });
 }
 
-//产�??
+//产值
 function updateOutputCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum(price+price_2+price_3) as sumFee " +
@@ -61,17 +61,18 @@ function updateOutputCount(params,callback) {
     });
 }
 
-//运营货车数量 , 重载公里�? , 空载公里�? , 总公里数 , 重载�?
+//运营货车数量 , 重载公里数 , 空载公里数 , 总公里数 , 重载率
 function updateTruckCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
-        " SELECT sum(drt.truck_id) as truck_count, " +
+        " SELECT count(DISTINCT(drt.truck_id)) as truck_count, " +
         " sum( CASE WHEN drt.load_flag = 1 THEN drt.distance END ) AS load_distance, " +
         " sum( CASE WHEN drt.load_flag = 0 THEN drt.distance END ) AS no_load_distance " +
         " FROM dp_route_task drt " +
         " WHERE drt.id is not null " +
         " AND drt.date_id >= " + params.yMonth + "01 " +
         " AND drt.date_id <= " + params.yMonth +"31 " +
-        " AND drt.task_status = 10 ) drtm " +
+        " AND drt.task_status = 10 " +
+        " AND outer_flag = 0 ) drtm " +
         " ON tms.y_month = " + params.yMonth  +
         " SET tms.truck_count = drtm.truck_count ," +
         " tms.load_distance = drtm.load_distance, " +
@@ -86,7 +87,7 @@ function updateTruckCount(params,callback) {
     });
 }
 
-/*外协商品车数�?1 , 外协费用1
+/*外协商品车数量1 , 外协费用1
 结算直接查询*/
 function updateOuterCarCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
@@ -110,7 +111,7 @@ function updateOuterCarCount(params,callback) {
     });
 }
 
-/*外协商品车数�?2 , 外协费用2
+/*外协商品车数量2 , 外协费用2
 路线查询费用*/
 function updateOuterRouteCarCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
@@ -136,7 +137,7 @@ function updateOuterRouteCarCount(params,callback) {
     });
 }
 
-/*外协产�??1
+/*外协产值1
 结算直接查询*/
 function updateOuterOutput(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
@@ -161,7 +162,7 @@ function updateOuterOutput(params,callback) {
     });
 }
 
-/*外协产�??2
+/*外协产值2
 路线查询费用*/
 function updateOuterRouteOutput(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
@@ -188,7 +189,7 @@ function updateOuterRouteOutput(params,callback) {
     });
 }
 
-//过路�?
+//过路费
 function updateEtcFeeCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum(te.etc_fee) AS sumFee " +
@@ -206,7 +207,7 @@ function updateEtcFeeCount(params,callback) {
     });
 }
 
-//加油�? , 加油�? , 尿素�? , 尿素�?
+//加油量 , 加油费 , 尿素量 , 尿素费
 function updateOilCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum(deor.oil) as oil, " +
@@ -230,16 +231,16 @@ function updateOilCount(params,callback) {
     });
 }
 
-//修车�? , 零件�? , 保养�?
-//内部维修�? , 内部维修�? , 在外维修次数 , 在外维修�?
+//修车费 , 零件费 , 保养费
+//内部维修数 , 内部维修费 , 在外维修次数 , 在外维修数
 function updateRepairCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
-        " SELECT sum( trr.repair_money ) as repari_fee, " +
+        " SELECT sum( trr.repair_money ) as repair_fee, " +
         " sum( trr.parts_money ) as part_fee, " +
         " sum( trr.maintain_money ) as maintain_fee ," +
         " count( CASE WHEN trr.repair_type = 2 THEN trr.repair_money END ) AS inner_repair_count, " +
         " count( CASE WHEN trr.repair_type = 3 THEN trr.repair_money END ) AS outer_repair_count, " +
-        " sum( CASE WHEN trr.repair_type = 2 THEN trr.repair_money END ) AS inner_repari_fee, " +
+        " sum( CASE WHEN trr.repair_type = 2 THEN trr.repair_money END ) AS inner_repair_fee, " +
         " sum( CASE WHEN trr.repair_type = 3 THEN trr.repair_money END ) AS outer_repair_fee " +
         " FROM truck_repair_rel trr " +
         " WHERE trr.id is not null " +
@@ -248,11 +249,11 @@ function updateRepairCount(params,callback) {
         " AND trr.payment_status = 1 " +
         " AND trr.repair_status = 1 ) trrm " +
         " ON tms.y_month = " + params.yMonth  +
-        " SET tms.repari_fee = trrm.repari_fee, " +
+        " SET tms.repair_fee = trrm.repair_fee, " +
         " tms.part_fee = trrm.part_fee, " +
         " tms.maintain_fee = trrm.maintain_fee, " +
         " tms.inner_repair_count = trrm.inner_repair_count, " +
-        " tms.inner_repari_fee = trrm.inner_repari_fee, " +
+        " tms.inner_repair_fee = trrm.inner_repair_fee, " +
         " tms.outer_repair_count = trrm.outer_repair_count," +
         " tms.outer_repair_fee = trrm.outer_repair_fee";
     var paramsArray=[],i=0;
@@ -263,7 +264,7 @@ function updateRepairCount(params,callback) {
     });
 }
 
-//处罚次数 , 处罚分数 , 买分金额 , 交�?�罚�? ,
+//处罚次数 , 处罚分数 , 买分金额 , 交通罚款 ,
 //处理金额 , 司机承担罚款 , 公司承担
 function updatePeccancyCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
@@ -294,7 +295,7 @@ function updatePeccancyCount(params,callback) {
     });
 }
 
-//质损�? , 个人承担质损�? , 公司承担质损�? , 质损总成�?
+//质损数 , 个人承担质损费 , 公司承担质损费 , 质损总成本
 function updateDamageCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT count(di.id) as damage_count, " +
@@ -319,7 +320,7 @@ function updateDamageCount(params,callback) {
     });
 }
 
-//商品车保险待�?
+//商品车保险待赔
 // function updateInsureCount(params,callback) {
 //     var query = " UPDATE total_month_stat tms INNER JOIN( " +
 //         " SELECT sum( insure_actual ) AS car_insurance " +
@@ -338,15 +339,15 @@ function updateDamageCount(params,callback) {
 //     });
 // }
 
-//洗车�?
+//洗车费
 function updateCleanFeeCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum( drlt.total_price ) AS clean_fee " +
         " FROM dp_route_load_task_clean_rel drlt " +
         " WHERE drlt.id is not null " +
-        " AND drlt.date_id >= " + params.yMonth + "01 " +
-        " AND drlt.date_id <= " + params.yMonth +"31 " +
-        " AND drlt.status =2 ) dim " +
+        " AND drlt.created_on >= ' " + params.startDate + "'" +
+        " AND drlt.created_on <= ' " + params.lastDateTime + " 23:59:59' " +
+        " AND drlt.status = 2 ) dim " +
         " ON tms.y_month = " + params.yMonth  +
         " SET tms.clean_fee = dim.clean_fee ";
     var paramsArray=[],i=0;
@@ -357,7 +358,7 @@ function updateCleanFeeCount(params,callback) {
     });
 }
 
-//进门�? , 拖车�? , 商品车停车费 , 地跑�? , 带路�?
+//进门费 , 拖车费 , 商品车停车费 , 地跑费 , 带路费
 function updateDriveTruckFeeCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum( dtmv.enter_fee ) AS enter_fee, " +
@@ -382,7 +383,7 @@ function updateDriveTruckFeeCount(params,callback) {
     });
 }
 
-//单车产�?? , 单公里产�?
+//单车产值 , 单公里产值
 function updatePerOutputCount(params,callback) {
     var query = " UPDATE total_month_stat " +
         " SET per_truck_output = output / car_count, " +
@@ -410,7 +411,20 @@ function updatePerCarDamageMoneyCount(params,callback) {
     });
 }
 
-//单车洗车�?
+//质损率
+function updateDamageRatioCount(params,callback) {
+    var query = " UPDATE total_month_stat " +
+        " SET damage_ratio = damage_count / car_count " +
+        " WHERE y_month = " + params.yMonth ;
+    var paramsArray=[],i=0;
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateDamageRatioCount ');
+        return callback(error,rows);
+    });
+}
+
+//单车洗车费
 function updatePerCarCleanFeeCount(params,callback) {
     var query = " UPDATE total_month_stat " +
         " SET per_car_clean_fee = clean_fee / car_count " +
@@ -423,7 +437,6 @@ function updatePerCarCleanFeeCount(params,callback) {
     });
 }
 
-
 function deleteTotalMonthStat(params,callback){
     var query = " delete from total_month_stat where y_month = ? ";
     var paramsArray=[],i=0;
@@ -433,7 +446,112 @@ function deleteTotalMonthStat(params,callback){
         return callback(error,rows);
     });
 }
-
+//结算部门
+function getSettleStat(params,callback) {
+    var query = " select tms.y_month, tms.output, tms.outer_output, " +
+        " tms.per_truck_output, tms.per_km_output " +
+        " FROM total_month_stat tms " +
+        " where tms.id is not null ";
+    var paramsArray=[],i=0;
+    if(params.yMonthStart){
+        paramsArray[i++] = params.yMonthStart;
+        query = query + " and tms.y_month >= ? ";
+    }
+    if(params.yMonthEnd){
+        paramsArray[i++] = params.yMonthEnd;
+        query = query + " and tms.y_month <= ? ";
+    }
+    query = query + ' order by tms.y_month desc ';
+    if (params.start && params.size) {
+        paramsArray[i++] = parseInt(params.start);
+        paramsArray[i++] = parseInt(params.size);
+        query += " limit ? , ? "
+    }
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' getSettleStat ');
+        return callback(error,rows);
+    });
+}
+//调度
+function getDispatchStat(params,callback) {
+    var query = " select tms.y_month, tms.truck_count , tms.car_count , " +
+        " tms.total_distance , tms.load_distance , tms.load_ratio " +
+        " FROM total_month_stat tms " +
+        " where tms.id is not null ";
+    var paramsArray=[],i=0;
+    if(params.yMonthStart){
+        paramsArray[i++] = params.yMonthStart;
+        query = query + " and tms.y_month >= ? ";
+    }
+    if(params.yMonthEnd){
+        paramsArray[i++] = params.yMonthEnd;
+        query = query + " and tms.y_month <= ? ";
+    }
+    query = query + ' order by tms.y_month desc ';
+    if (params.start && params.size) {
+        paramsArray[i++] = parseInt(params.start);
+        paramsArray[i++] = parseInt(params.size);
+        query += " limit ? , ? "
+    }
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' getDispatchStat ');
+        return callback(error,rows);
+    });
+}
+//质量
+function getQualityStat(params,callback) {
+    var query = " select tms.y_month, tms.damage_count  , tms.total_damange_money  , " +
+        " tms.company_damage_money , tms.per_car_damage_money  , tms.per_car_c_damange_money , " +
+        " tms.clean_fee  , tms.per_car_clean_fee  , tms.damage_ratio  " +
+        " FROM total_month_stat tms " +
+        " where tms.id is not null ";
+    var paramsArray=[],i=0;
+    if(params.yMonthStart){
+        paramsArray[i++] = params.yMonthStart;
+        query = query + " and tms.y_month >= ? ";
+    }
+    if(params.yMonthEnd){
+        paramsArray[i++] = params.yMonthEnd;
+        query = query + " and tms.y_month <= ? ";
+    }
+    query = query + ' order by tms.y_month desc ';
+    if (params.start && params.size) {
+        paramsArray[i++] = parseInt(params.start);
+        paramsArray[i++] = parseInt(params.size);
+        query += " limit ? , ? "
+    }
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' getDispatchStat ');
+        return callback(error,rows);
+    });
+}
+//车管
+function getTruckStat(params,callback) {
+    var query = " select tms.y_month, 	tms.etc_fee, tms.oil_vol, tms.oil_fee, tms.urea_vol, tms.urea_fee," +
+        " tms.repair_fee, tms.part_fee, tms.maintain_fee, tms.outer_repair_count, tms.outer_repair_fee, " +
+        " tms.buy_score_fee, tms.traffic_fine_fee, tms.driver_under_money, tms.company_under_money  " +
+        " FROM total_month_stat tms " +
+        " where tms.id is not null ";
+    var paramsArray=[],i=0;
+    if(params.yMonthStart){
+        paramsArray[i++] = params.yMonthStart;
+        query = query + " and tms.y_month >= ? ";
+    }
+    if(params.yMonthEnd){
+        paramsArray[i++] = params.yMonthEnd;
+        query = query + " and tms.y_month <= ? ";
+    }
+    query = query + ' order by tms.y_month desc ';
+    if (params.start && params.size) {
+        paramsArray[i++] = parseInt(params.start);
+        paramsArray[i++] = parseInt(params.size);
+        query += " limit ? , ? "
+    }
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' getDispatchStat ');
+        return callback(error,rows);
+    });
+}
 
 module.exports ={
     addTotalMonthStat : addTotalMonthStat,
@@ -453,6 +571,11 @@ module.exports ={
     updateDriveTruckFeeCount : updateDriveTruckFeeCount,
     updatePerOutputCount : updatePerOutputCount,
     updatePerCarDamageMoneyCount : updatePerCarDamageMoneyCount,
+    updateDamageRatioCount : updateDamageRatioCount,
     updatePerCarCleanFeeCount : updatePerCarCleanFeeCount,
-    deleteTotalMonthStat : deleteTotalMonthStat
+    deleteTotalMonthStat : deleteTotalMonthStat,
+    getSettleStat : getSettleStat,
+    getDispatchStat : getDispatchStat,
+    getQualityStat : getQualityStat,
+    getTruckStat : getTruckStat
 }
