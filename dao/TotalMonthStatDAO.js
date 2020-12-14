@@ -47,7 +47,6 @@ function updateOutputCount(params,callback) {
         " WHERE ci.id is not null " +
         " AND ci.order_date_id >= " + params.yMonth + "01 " +
         " AND ci.order_date_id <= " + params.yMonth +"31 " +
-        " AND ci.car_status = 9   " +
         " AND ci.entrust_id = sc.entrust_id " +
         " AND ci.route_start_id = sc.route_start_id " +
         " AND ci.route_end_id = sc.route_end_id ) cim " +
