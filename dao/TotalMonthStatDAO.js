@@ -385,7 +385,7 @@ function updateDriveTruckFeeCount(params,callback) {
 //单车产值 , 单公里产值
 function updatePerOutputCount(params,callback) {
     var query = " UPDATE total_month_stat " +
-        " SET per_truck_output = output / car_count, " +
+        " SET per_truck_output = output / truck_count, " +
         " per_km_output = output / total_distance " +
         " WHERE y_month = " + params.yMonth ;
     var paramsArray=[],i=0;
