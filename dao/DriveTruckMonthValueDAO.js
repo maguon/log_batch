@@ -152,8 +152,8 @@ function updateCleanFee(params,callback){
         " sum(drcr.car_parking_fee) car_parking_fee, " +
         " sum(drcr.total_run_fee) total_run_fee, " +
         " sum(drcr.lead_fee) lead_fee " +
-        " from dp_route_load_task_clean_rel drcr " +
-        " where drcr.created_on>="+params.yMonth+"01 and drcr.created_on<='"+lastDateTime+"' and drcr.status=2 " +
+        " from dp_route_load_task_clean_rel drcr left join dp_route_load_task dprl on drcr.dp_route_load_task_id = dprl.id" +
+        " where dprl.load_date>="+params.yMonth+"01 and dprl.load_date<='"+lastDateTime+"' and drcr.status=2 " +
         " group by drcr.drive_id,drcr.truck_id) drcrm " +
         " on dtmv.drive_id = drcrm.drive_id and dtmv.truck_id = drcrm.truck_id and dtmv.y_month = " +params.yMonth+
         " set dtmv.clean_fee = drcrm.total_clean_fee , dtmv.trailer_fee = drcrm.total_trailer_fee , " +
@@ -201,12 +201,14 @@ function updateEtcFee(params,callback){
 
 function updateOilFee(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
-        " select deor.drive_id,deor.truck_id,sum(deor.oil_money) oil_fee,sum(deor.urea_money) urea_fee " +
+        " select deor.drive_id,deor.truck_id, sum( deor.oil ) oil_vol, sum(deor.oil_money) oil_fee, " +
+        " sum( deor.urea ) urea_vol, sum(deor.urea_money) urea_fee " +
         " from drive_exceed_oil_rel deor " +
         " where deor.payment_status = 1 and deor.date_id>="+params.yMonth+"01 and deor.date_id<="+params.yMonth+"31 " +
         " group by deor.drive_id,deor.truck_id) deorm " +
         " on dtmv.drive_id = deorm.drive_id and dtmv.truck_id = deorm.truck_id and dtmv.y_month = " +params.yMonth+
-        " set dtmv.oil_fee = deorm.oil_fee , dtmv.urea_fee = deorm.urea_fee ";
+        " set dtmv.oil_vol = deorm.oil_vol , dtmv.oil_fee = deorm.oil_fee , " +
+        " dtmv.urea_vol = deorm.urea_vol , dtmv.urea_fee = deorm.urea_fee ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){

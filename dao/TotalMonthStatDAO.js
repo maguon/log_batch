@@ -342,10 +342,10 @@ function updateDamageCount(params,callback) {
 function updateCleanFeeCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
         " SELECT sum( drlt.total_price ) AS clean_fee " +
-        " FROM dp_route_load_task_clean_rel drlt " +
+        " FROM dp_route_load_task_clean_rel drlt left join dp_route_load_task dprl on drlt.dp_route_load_task_id = dprl.id" +
         " WHERE drlt.id is not null " +
-        " AND drlt.created_on >= ' " + params.startDate + "'" +
-        " AND drlt.created_on <= ' " + params.lastDateTime + " 23:59:59' " +
+        " AND dprl.load_date >= ' " + params.startDate + "'" +
+        " AND dprl.load_date <= ' " + params.lastDateTime + " 23:59:59' " +
         " AND drlt.status = 2 ) dim " +
         " ON tms.y_month = " + params.yMonth  +
         " SET tms.clean_fee = dim.clean_fee ";
