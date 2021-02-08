@@ -36,8 +36,8 @@ function updateStorageCarCount(params,callback){
         " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end) not_storage_car_count, " +
         " sum( case when dprl.receive_flag=1 or dprl.transfer_flag=1 then dprl.real_count end) storage_car_count, " +
         " sum( case when dprl.receive_flag=0 and dprl.transfer_flag=0 then dprl.real_count end)*4 as enter_fee " +
-        " from dp_route_task dpr " +
-        " left join dp_route_load_task dprl on dpr.id = dprl.dp_route_task_id " +
+        " from  dp_route_load_task dprl " +
+        " left join dp_route_task dpr on dpr.id = dprl.dp_route_task_id " +
         " where dpr.task_status >=9 and dpr.task_plan_date>="+params.yMonth+"01 and dpr.task_plan_date<="+params.yMonth+"31 " +
         " group by dpr.drive_id,dpr.truck_id) dprm " +
         " on dtmv.drive_id = dprm.drive_id and dtmv.truck_id = dprm.truck_id and dtmv.y_month = " +params.yMonth+
