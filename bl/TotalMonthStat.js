@@ -99,6 +99,22 @@ function createDriveTruckMonthValue(yMonth){
         })
     }).seq(function () {
         var that = this;
+        //运营货车数量  truck_count 根据位数统计
+        totalMonthStatDAO.updateTruckCountConcat(params,function(err,result){
+            if (err) {
+                logger.error(' updateTruckCountConcat ' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' updateTruckCountConcat ' + 'success');
+                }else{
+                    logger.warn(' updateTruckCountConcat ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function () {
+        var that = this;
         /*外协商品车数量1 , 外协费用1 结算直接查询*/
         totalMonthStatDAO.updateOuterCarCount(params,function(err,result){
             if (err) {

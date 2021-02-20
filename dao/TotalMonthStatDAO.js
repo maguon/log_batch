@@ -86,6 +86,31 @@ function updateTruckCount(params,callback) {
     });
 }
 
+//运营货车数量  truck_count 根据位数统计
+function updateTruckCountConcat(params,callback) {
+    var query = " UPDATE total_month_stat tms SET truck_count_desc = ( " +
+        " SELECT CONCAT( '{', " +
+        " group_concat( CONCAT_WS( ',', " +
+        " CONCAT( '\"', drt_count.truck_number, '\":', drt_count.truck_count ) ) ),'}' ) AS concat_truck_count " +
+        " FROM (" +
+        " SELECT drt.truck_number, count( DISTINCT ( drt.truck_id ) ) AS truck_count " +
+        " FROM dp_route_task drt  " +
+        " WHERE drt.id is not null " +
+        " AND drt.date_id >= " + params.yMonth + "01 " +
+        " AND drt.date_id <= " + params.yMonth +"31 " +
+        " AND drt.task_status = 10 " +
+        " AND outer_flag = 0  " +
+        " AND drt.truck_number > 0 " +
+        " GROUP BY drt.truck_number ORDER BY drt.truck_number asc) drt_count " +
+        " ) where tms.y_month = " + params.yMonth;
+    var paramsArray=[],i=0;
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateTruckCountConcat ');
+        return callback(error,rows);
+    });
+}
+
 /*外协商品车数量1 , 外协费用1
 结算直接查询*/
 function updateOuterCarCount(params,callback) {
@@ -557,6 +582,7 @@ module.exports ={
     updateCarCount : updateCarCount,
     updateOutputCount : updateOutputCount,
     updateTruckCount : updateTruckCount,
+    updateTruckCountConcat: updateTruckCountConcat,
     updateOuterCarCount : updateOuterCarCount,
     updateOuterRouteCarCount : updateOuterRouteCarCount,
     updateOuterOutput : updateOuterOutput,
