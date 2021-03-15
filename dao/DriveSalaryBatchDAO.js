@@ -236,7 +236,7 @@ function updateDistanceSalary(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
         "   SELECT drive_id, sum(CASE" +
-        "      WHEN reverse_flag=0 and truck_number=6 and then distance*0.8" +
+        "      WHEN reverse_flag=0 and truck_number=6 then distance*0.8" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count<5 then distance*0.6" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=5 then distance*0.7" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=6 then distance*0.8" +
