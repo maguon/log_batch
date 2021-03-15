@@ -98,7 +98,7 @@ function updateDistanceSalary(params,callback){
     var query = " update drive_truck_month_value dtmv inner join( " +
         " select dpr.drive_id,dpr.truck_id, " +
         " sum( case " +
-        " when drt.reverse_flag=0 and drt.truck_number=6 then drt.distance*0.8 " +
+        " when dpr.reverse_flag=0 and dpr.truck_number=6 then dpr.distance*0.8 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count<5 then dpr.distance*0.6 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=5 then dpr.distance*0.7 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=6 then dpr.distance*0.8 " +
