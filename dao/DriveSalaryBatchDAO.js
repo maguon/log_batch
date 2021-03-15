@@ -124,7 +124,7 @@ function updateExceedOilFee(params, callback) {
 function updateBonus(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
-        "   SELECT drive_id, sum(full_work_bonus) as full_work_bonus, sum(hotel_bonus) as hotel_bonus, sum(other_bonus) as other_bonus" +
+        "   SELECT drive_id, sum(full_work_bonus) as full_work_bonus, sum(hotel_bonus) as hotel_bonus, sum(transfer_bonus) as transfer_bonus, sum(other_bonus) as other_bonus" +
         "   FROM drive_work" +
         "   WHERE y_month=" + params.yMonth +
         "   GROUP BY drive_id ) as base" +
@@ -133,6 +133,7 @@ function updateBonus(params, callback) {
         // 更新字段
         " SET ds.full_work_bonus=base.full_work_bonus," +
         "     ds.hotel_bonus=base.hotel_bonus," +
+        "     ds.transfer_bonus = base.transfer_bonus, " +
         "     ds.other_bonus=base.other_bonus";
     var paramsArray = [], i = 0;
     db.dbQuery(query, paramsArray, function (error, rows) {
@@ -235,11 +236,7 @@ function updateDistanceSalary(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
         "   SELECT drive_id, sum(CASE" +
-        "      WHEN reverse_flag=0 and truck_number=6 and car_count<=3 then distance*0.6" +
-        "      WHEN reverse_flag=0 and truck_number=6 and car_count=4 then distance*0.7" +
-        "      WHEN reverse_flag=0 and truck_number=6 and car_count=5 then distance*0.8" +
-        "      WHEN reverse_flag=0 and truck_number=6 and car_count=6 then distance*0.9" +
-        "      WHEN reverse_flag=0 and truck_number=6 and car_count>=7 then distance" +
+        "      WHEN reverse_flag=0 and truck_number=6 and then distance*0.8" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count<5 then distance*0.6" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=5 then distance*0.7" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=6 then distance*0.8" +
