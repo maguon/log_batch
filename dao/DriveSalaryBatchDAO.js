@@ -280,21 +280,26 @@ function updateEnterFee(params, callback) {
     });
 }
 
-// 重载，空载
+// 重载，空载，到库数，非到库数
 function updateLoadDistance(params, callback) {
     var query = "UPDATE drive_salary as ds" +
         " INNER JOIN (" +
-        "   SELECT drive_id," +
-        "   sum(CASE WHEN load_flag = 1 THEN distance ELSE '0' END) as load_distance," +
-        "   sum(CASE WHEN load_flag = 0 THEN distance ELSE '0' END) as no_load_distance" +
-        "   FROM dp_route_task" +
-        "   WHERE task_plan_date>='" + params.monthStart + "' AND task_plan_date<='" + params.monthEnd + "' AND task_status>=9" +
-        "   GROUP BY drive_id) as base" +
+        "   SELECT dpr.drive_id," +
+        "   sum(CASE WHEN dpr.load_flag = 1 THEN dpr.distance ELSE '0' END) as load_distance," +
+        "   sum(CASE WHEN dpr.load_flag = 0 THEN dpr.distance ELSE '0' END) as no_load_distance," +
+        "   sum( CASE WHEN dprl.receive_flag = 0 AND dprl.transfer_flag = 0 THEN dprl.real_count END ) not_storage_car_count," +
+        "   sum( CASE WHEN dprl.receive_flag = 1 OR dprl.transfer_flag = 1 THEN dprl.real_count END ) storage_car_count  " +
+        "   FROM dp_route_task dpr " +
+        "   LEFT JOIN dp_route_load_task dprl ON dpr.id = dprl.dp_route_task_id " +
+        "   WHERE dpr.task_plan_date>='" + params.monthStart + "' AND dpr.task_plan_date<='" + params.monthEnd + "' AND dpr.task_status>=9" +
+        "   GROUP BY dpr.drive_id) as base" +
         " ON ds.drive_id = base.drive_id" +
         " AND ds.month_date_id = " + params.yMonth +
         // 更新字段
         " SET ds.load_distance=base.load_distance," +
-        "     ds.no_load_distance=base.no_load_distance";
+        "     ds.no_load_distance=base.no_load_distance," +
+        "     ds.s_car_count = base.storage_car_count," +
+        "     ds.ns_car_count = base.not_storage_car_count";
     var paramsArray = [], i = 0;
     db.dbQuery(query, paramsArray, function (error, rows) {
         logger.debug(' updateLoadDistance ');
