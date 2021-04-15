@@ -336,6 +336,28 @@ function updateDriveSalaryPersonalTax(params,callback){
         return callback(error,rows);
     });
 }
+function updateSalaryRatio(params, callback) {
+    var query = "UPDATE drive_salary as ds" +
+        " INNER JOIN (" +
+        " SELECT ds.drive_id, (CASE" +
+        " WHEN ds.load_distance >= 12000 AND ds.s_car_count + ds.ns_car_count >= 240 THEN 1.07 " +
+        " WHEN ds.load_distance >= 12000 AND ds.s_car_count + ds.ns_car_count < 240 AND ds.s_car_count + ds.ns_car_count >= 200 THEN 1.06 " +
+        " WHEN ds.load_distance >= 10000 AND ds.load_distance < 12000 AND ds.s_car_count + ds.ns_car_count >= 200 THEN 1.06 " +
+        " ELSE '1' END ) salary_ratio " +
+        " FROM drive_salary ds" +
+        " LEFT JOIN drive_info d ON d.id = ds.drive_id " +
+        " WHERE ds.id IS NOT NULL " +
+        " AND d.LEVEL = 1 " +
+        " AND ds.month_date_id = " + params.yMonth +
+        " ) AS base ON ds.drive_id = base.drive_id " +
+        " AND ds.month_date_id = " + params.yMonth +
+        " SET ds.salary_ratio = base.salary_ratio";
+    var paramsArray = [], i = 0;
+    db.dbQuery(query, paramsArray, function (error, rows) {
+        logger.debug(' updateSalaryRatio ');
+        return callback(error, rows);
+    });
+}
 
 module.exports = {
     addDriveSalaryBatch: addDriveSalaryBatch,
@@ -352,5 +374,6 @@ module.exports = {
     updateEnterFee: updateEnterFee,
     updateLoadDistance: updateLoadDistance,
     deleteDriveSalary: deleteDriveSalary ,
-    updateDriveSalaryPersonalTax: updateDriveSalaryPersonalTax
+    updateDriveSalaryPersonalTax: updateDriveSalaryPersonalTax,
+    updateSalaryRatio :updateSalaryRatio
 };

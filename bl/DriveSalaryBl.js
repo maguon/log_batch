@@ -231,6 +231,22 @@ function createDriveSalaryBatch(req,res,next){
             }
         })
     }).seq(function () {
+        var that = this;
+        // 更新 系数
+        driveSalaryBatchDAO.updateSalaryRatio(params,function(err,result){
+            if (err) {
+                logger.error(' updateSalaryRatio ' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' updateSalaryRatio ' + 'success');
+                }else{
+                    logger.warn(' updateSalaryRatio ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function () {
         var that= this;
         // 更新 重载，空载
         driveSalaryBatchDAO.updateLoadDistance(params,function(err,result){
