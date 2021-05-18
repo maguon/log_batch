@@ -259,7 +259,7 @@ function updateCarOilFee(params,callback){
         " select dprtf.drive_id,dprtf.truck_id,sum(dprtf.car_oil_fee) car_oil_fee,sum(dprtf.car_total_price) car_parking_total_fee," +
         " sum(dprtf.total_price) truck_parking_fee,sum(dprtf.other_fee) other_fee " +
         " from dp_route_task_fee dprtf " +
-        " where dprtf.date_id>= '"+params.yMonth+"01' and dprtf.date_id<= '"+lastDateTime+"' and dprtf.status=2 " +
+        " where dprtf.created_on>= '"+params.yMonth+"01' and dprtf.created_on<= '"+lastDateTime+"' and dprtf.status=2 " +
         " group by dprtf.drive_id,dprtf.truck_id) dprtfm " +
         " set dtmv.car_oil_fee = dprtfm.car_oil_fee , dtmv.car_parking_total_fee = dprtfm.car_parking_total_fee , " +
         " dtmv.truck_parking_fee = dprtfm.truck_parking_fee , dtmv.other_fee = dprtfm.other_fee "+
