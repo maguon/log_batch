@@ -147,14 +147,15 @@ function updateCleanFee(params,callback){
         " sum(drcr.total_trailer_fee) total_trailer_fee, " +
         " sum(drcr.car_parking_fee) car_parking_fee, " +
         " sum(drcr.total_run_fee) total_run_fee, " +
-        " sum(drcr.lead_fee) lead_fee " +
+        " sum(drcr.lead_fee) lead_fee, " +
+        " sum( drcr.total_other_fee ) total_other_fee " +
         " from dp_route_load_task_clean_rel drcr left join dp_route_load_task dprl on drcr.dp_route_load_task_id = dprl.id" +
         " where dprl.load_date>="+params.yMonth+"01 and dprl.load_date<='"+lastDateTime+"' and drcr.status=2 " +
         " group by drcr.drive_id,drcr.truck_id) drcrm " +
         " on dtmv.drive_id = drcrm.drive_id and dtmv.truck_id = drcrm.truck_id and dtmv.y_month = " +params.yMonth+
         " set dtmv.clean_fee = drcrm.total_clean_fee , dtmv.trailer_fee = drcrm.total_trailer_fee , " +
         " dtmv.car_parking_fee = drcrm.car_parking_fee , dtmv.run_fee = drcrm.total_run_fee, " +
-        " dtmv.lead_fee = drcrm.lead_fee ";
+        " dtmv.lead_fee = drcrm.lead_fee , dtmv.other_clean_fee = drcrm.total_other_fee ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
@@ -248,6 +249,39 @@ function updateRepair(params,callback){
 
     db.dbQuery(query,paramsArray,function(error,rows){
         logger.debug(' updateRepair ');
+        return callback(error,rows);
+    });
+}
+function updateRepair2(params,callback){
+    var query = " update drive_truck_month_value dtmv inner join( " +
+        " select trr.drive_id,trr.truck_id,sum(trr.repair_money) repair_fee, " +
+        " sum(trr.parts_money) parts_fee,sum(trr.maintain_money) maintain_fee " +
+        " from truck_repair_rel trr " +
+        " where trr.payment_status = 1 and trr.date_id>="+params.yMonth+"01 and trr.date_id<="+params.yMonth+"31 and trr.repair_status =1 AND trr.repair_type = 2  " +
+        " group by trr.drive_id,trr.truck_id) trrm " +
+        " on dtmv.drive_id = trrm.drive_id and dtmv.truck_id = trrm.truck_id and dtmv.y_month = " +params.yMonth+
+        " set dtmv.repair_fee_2 = trrm.repair_fee , dtmv.parts_fee_2 = trrm.parts_fee , dtmv.maintain_fee_2 = trrm.maintain_fee ";
+    var paramsArray=[],i=0;
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateRepair2 ');
+        return callback(error,rows);
+    });
+}
+
+function updateRepair3(params,callback){
+    var query = " update drive_truck_month_value dtmv inner join( " +
+        " select trr.drive_id,trr.truck_id,sum(trr.repair_money) repair_fee, " +
+        " sum(trr.parts_money) parts_fee,sum(trr.maintain_money) maintain_fee " +
+        " from truck_repair_rel trr " +
+        " where trr.payment_status = 1 and trr.date_id>="+params.yMonth+"01 and trr.date_id<="+params.yMonth+"31 and trr.repair_status =1 AND trr.repair_type = 3" +
+        " group by trr.drive_id,trr.truck_id) trrm " +
+        " on dtmv.drive_id = trrm.drive_id and dtmv.truck_id = trrm.truck_id and dtmv.y_month = " +params.yMonth+
+        " set dtmv.repair_fee_3 = trrm.repair_fee , dtmv.parts_fee_3 = trrm.parts_fee , dtmv.maintain_fee_3 = trrm.maintain_fee ";
+    var paramsArray=[],i=0;
+
+    db.dbQuery(query,paramsArray,function(error,rows){
+        logger.debug(' updateRepair3 ');
         return callback(error,rows);
     });
 }
@@ -404,6 +438,8 @@ module.exports ={
     updateOilFee : updateOilFee,
     updatePeccancy : updatePeccancy,
     updateRepair : updateRepair,
+    updateRepair2: updateRepair2,
+    updateRepair3 :updateRepair3,
     updateCarOilFee : updateCarOilFee,
     updateTruckNum : updateTruckNum,
     updateDrive : updateDrive,

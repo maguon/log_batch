@@ -219,15 +219,31 @@ function createDriveTruckMonthValue(req,res,next){
     }).seq(function () {
         var that = this;
         params.yMonth = yMonth;
-        driveTruckMonthValueDAO.updateRepair(params,function(err,result){
+        driveTruckMonthValueDAO.updateRepair2(params,function(err,result){
             if (err) {
-                logger.error(' updateRepair ' + err.message);
+                logger.error(' updateRepair2' + err.message);
                 throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
             } else {
                 if(result&&result.affectedRows>0){
-                    logger.info(' updatePeccancy ' + 'success');
+                    logger.info(' updateRepair2 ' + 'success');
                 }else{
-                    logger.warn(' updatePeccancy ' + 'failed');
+                    logger.warn(' updateRepair2 ' + 'failed');
+                }
+                that();
+            }
+        })
+    }).seq(function () {
+        var that = this;
+        params.yMonth = yMonth;
+        driveTruckMonthValueDAO.updateRepair3(params,function(err,result){
+            if (err) {
+                logger.error(' updateRepair3' + err.message);
+                throw sysError.InternalError(err.message,sysMsg.SYS_INTERNAL_ERROR_MSG);
+            } else {
+                if(result&&result.affectedRows>0){
+                    logger.info(' updateRepair3 ' + 'success');
+                }else{
+                    logger.warn(' updateRepair3 ' + 'failed');
                 }
                 that();
             }
