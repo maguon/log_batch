@@ -41,17 +41,14 @@ function updateCarCount(params,callback) {
 //产值
 function updateOutputCount(params,callback) {
     var query = " UPDATE total_month_stat tms INNER JOIN( " +
-        " SELECT sum(price+price_2+price_3) as sumFee " +
-        " FROM car_info ci " +
-        " LEFT JOIN settle_car sc on ci.vin = sc.vin " +
-        " WHERE ci.id is not null " +
-        " AND ci.order_date_id >= " + params.yMonth + "01 " +
-        " AND ci.order_date_id <= " + params.yMonth +"31 " +
-        " AND ci.entrust_id = sc.entrust_id " +
-        " AND ci.route_start_id = sc.route_start_id " +
-        " AND ci.route_end_id = sc.route_end_id ) cim " +
+        " select count(c.id)as entrust_car_count,convert(sum(ecrr.distance*ecrr.fee),decimal(10,2)) as entrust_car_price "+
+        " from car_info c  left join entrust_info e on c.entrust_id = e.id " +
+        " left join entrust_city_route_rel ecrr on c.route_start_id = ecrr.route_start_id and c.route_end_id = ecrr.route_end_id " +
+        " and c.make_id = ecrr.make_id and c.entrust_id = ecrr.entrust_id and c.size_type = ecrr.size_type " +
+        " where ecrr.entrust_id is not null and c.car_status >=1  and c.order_date>="+ params.yMonth + "01 and c.order_date<="+ params.yMonth +"31 " +
+        "  ) cim " +
         " ON tms.y_month = " + params.yMonth  +
-        " SET tms.output = cim.sumFee";
+        " SET tms.output = cim.entrust_car_price ";
     var paramsArray=[],i=0;
 
     db.dbQuery(query,paramsArray,function(error,rows){
