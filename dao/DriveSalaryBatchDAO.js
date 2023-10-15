@@ -241,13 +241,16 @@ function updateDistanceSalary(params, callback) {
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=5 then distance*0.7" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=6 then distance*0.8" +
         "      WHEN reverse_flag=0 and truck_number=8 and car_count=7 then distance*0.9" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=8 then distance" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=9 and distance<500 then distance*1.3" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=9 and distance>=500 and distance<=1000 then distance*1.22" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=9 and distance>1000 then distance*1.15" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=10 and distance<500 then distance*1.45" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=10 and distance>=500 and distance<=1000 then distance*1.37" +
-        "      WHEN reverse_flag=0 and truck_number=8 and car_count=10 and distance>1000 then distance*1.3" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=8 or car_count=12) then distance" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=9 or car_count=13) and distance<500 then distance*1.3" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=9 or car_count=13) and distance>=500 and distance<=1000 then distance*1.22" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=9 or car_count=13) and distance>1000 then distance*1.15" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=10 or car_count=14) and distance<500 then distance*1.45" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=10 or car_count=14) and distance>=500 and distance<=1000 then distance*1.37" +
+        "      WHEN reverse_flag=0 and truck_number=8 and (car_count=10 or car_count=14) and distance>1000 then distance*1.3" +
+        "      WHEN reverse_flag=0 and truck_number=8 and car_count=11 and distance<500 then distance*1.7" +
+        "      WHEN reverse_flag=0 and truck_number=8 and car_count=11 and distance>=500 and distance<=1000 then distance*1.57" +
+        "      WHEN reverse_flag=0 and truck_number=8 and car_count=11 and distance>1000 then distance*1.45" +
         "      ELSE '0' END) distance_salary," +
         "      sum(CASE WHEN reverse_flag=1 then reverse_money ELSE '0' END) reverse_salary" +
         "   FROM dp_route_task " +

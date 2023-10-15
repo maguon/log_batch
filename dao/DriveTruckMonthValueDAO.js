@@ -103,13 +103,16 @@ function updateDistanceSalary(params,callback){
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=5 then dpr.distance*0.7 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=6 then dpr.distance*0.8 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=7 then dpr.distance*0.9 " +
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=8 then dpr.distance " +
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=9 and distance<500 then dpr.distance*1.3 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=9 and distance>=500 and distance<=1000 then dpr.distance*1.22 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=9 and distance>1000 then dpr.distance*1.15 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=10 and distance<500 then dpr.distance*1.45 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=10 and distance>=500 and distance<=1000 then dpr.distance*1.37 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=10 and distance>1000 then dpr.distance*1.3 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=8 or dpr.car_count=12) then dpr.distance " +
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=9 or dpr.car_count=13)and distance<500 then dpr.distance*1.3 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=9 or dpr.car_count=13) and distance>=500 and distance<=1000 then dpr.distance*1.22 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=9 or dpr.car_count=13) and distance>1000 then dpr.distance*1.15 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=10 or dpr.car_count=14) and distance<500 then dpr.distance*1.45 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=10 or dpr.car_count=14) and distance>=500 and distance<=1000 then dpr.distance*1.37 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=10 or dpr.car_count=14) and distance>1000 then dpr.distance*1.3 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance<500 then dpr.distance*1.7 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance>=500 and distance<=1000 then dpr.distance*1537 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance>1000 then dpr.distance*1.45 "+
         " end) distance_salary, " +
         " sum(case when dpr.reverse_flag=1 then dpr.reverse_money end) reverse_salary " +
         " from dp_route_task dpr " +
