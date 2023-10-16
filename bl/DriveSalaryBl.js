@@ -12,7 +12,7 @@ var moment = require('moment/moment.js');
 function createDriveSalaryBatch(req,res,next){
     var params = {} ;
     var myDate = new Date();
-    var yMonthDay = new Date(myDate-30*24*60*60*1000);
+    var yMonthDay = new Date(myDate-60*24*60*60*1000);
     var yMonth = moment(yMonthDay).format('YYYYMM');
     params.yMonth = yMonth;
     params.monthStart = params.yMonth.substr(0,4) + '-' + params.yMonth.substr(4,2) + '-01';

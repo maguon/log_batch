@@ -17,7 +17,7 @@ var moment = require('moment/moment.js');
 function createDriveTruckMonthValue(req,res,next){
     var params = {} ;
     var myDate = new Date();
-    var yMonthDay = new Date(myDate-30*24*60*60*1000);
+    var yMonthDay = new Date(myDate-60*24*60*60*1000);
     var yMonth = moment(yMonthDay).format('YYYYMM');
     Seq().seq(function(){
         var that = this;
@@ -41,7 +41,7 @@ function createDriveTruckMonthValue(req,res,next){
         driveTruckMonthValueDAO.addDistance(params,function(error,result){
             if (error) {
                 if(error.message.indexOf("Duplicate") > 0) {
-                    resUtil.resetFailedRes(res, "Êý¾ÝÒÑ¾­´æÔÚ");
+                    resUtil.resetFailedRes(res, "ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½");
                     return next();
                 } else{
                     logger.error(' createDriveTruckMonthValue ' + error.message);
