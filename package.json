@@ -4,7 +4,7 @@
     "dependencies": {
         "assert-plus": "*",
         "later"	: "*",
-        "log4js": "*",
+        "log4js": "6.7.1",
         "moment": "2.18.1",
         "mongoose": "4.9.4",
         "mysql": "*",
