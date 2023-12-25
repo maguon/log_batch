@@ -111,7 +111,7 @@ function updateDistanceSalary(params,callback){
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=10 or dpr.car_count=14) and distance>=500 and distance<=1000 then dpr.distance*1.37 "+
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and (dpr.car_count=10 or dpr.car_count=14) and distance>1000 then dpr.distance*1.3 "+
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance<500 then dpr.distance*1.7 "+
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance>=500 and distance<=1000 then dpr.distance*1537 "+
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance>=500 and distance<=1000 then dpr.distance*1.57 "+
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=11 and distance>1000 then dpr.distance*1.45 "+
         " end) distance_salary, " +
         " sum(case when dpr.reverse_flag=1 then dpr.reverse_money end) reverse_salary " +
