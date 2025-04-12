@@ -99,7 +99,8 @@ function updateDistanceSalary(params,callback){
         " select dpr.drive_id,dpr.truck_id, " +
         " sum( case " +
         " when dpr.reverse_flag=0 and dpr.truck_number=6 then dpr.distance*0.8 " +
-        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count<5 then dpr.distance*0.6 " +
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count<4 then dpr.distance*0.3 " +
+        " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=4 then dpr.distance*0.6 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=5 then dpr.distance*0.7 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=6 then dpr.distance*0.8 " +
         " when dpr.reverse_flag=0 and dpr.truck_number=8 and dpr.car_count=7 then dpr.distance*0.9 " +
